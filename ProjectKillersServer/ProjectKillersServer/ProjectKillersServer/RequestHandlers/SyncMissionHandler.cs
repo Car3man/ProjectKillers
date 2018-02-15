@@ -17,8 +17,6 @@ namespace ProjectKillersServer.RequestHandlers {
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            Console.WriteLine(EntryPoint.Mission.DynamicObjects.Count);
-
             NetData allResponse = new NetData(RequestTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(EntryPoint.Mission) } });
             EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
         }

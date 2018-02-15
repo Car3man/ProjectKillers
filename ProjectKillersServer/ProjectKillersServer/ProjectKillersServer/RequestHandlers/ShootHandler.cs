@@ -22,7 +22,7 @@ namespace ProjectKillersServer.RequestHandlers {
             BulletObject bullet = new BulletObject(pos, new Vector3K(0f, 0f, 0f), new Vector3K(0.28f, 0.09f, 0f), eulerAngles);
             bullet.Mission = EntryPoint.Mission;
 
-            EntryPoint.Mission.AddDynamicObject(bullet);
+            EntryPoint.Mission.AddDynamicObject(bullet, EntryPoint.Physics.World);
 
             NetData allResponse = new NetData(RequestTypes.Shoot, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
             EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);

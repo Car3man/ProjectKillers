@@ -10,7 +10,7 @@ namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
     [ProtoContract(SkipConstructor = true)]
     public class BulletObject : BaseMissionObject {
-        public float MoveSpeed = 35F;
+        public float MoveSpeed = 10F;
 
         public BulletObject(Vector3K position, Vector3K center, Vector3K size, Vector3K eulerAngles) : base(position, center, size, eulerAngles) {
             ID = Guid.NewGuid().ToString();
@@ -30,28 +30,19 @@ namespace ProjectKillersCommon.Data.Objects {
 
         }
 
-        public override void Update(float deltaTime) {
-            float angle = EulerAngles.z;
-            angle = angle * Mathf.Deg2Rad;
-            Position = new Vector3K((Position.x + Mathf.Cos(angle) * deltaTime * MoveSpeed), (Position.y + Mathf.Sin(angle) * deltaTime * MoveSpeed), 0F);
+        public override void SetupPhysics (Box2DX.Dynamics.World world) {
+            base.SetupPhysics(world);
 
-            double dist = 0;
-            foreach(string objID in Mission.Objects.Keys) {
-                if (Mission.Objects[objID] == this || !Mission.Objects[objID].CanBreaked) continue;
+            body.SetLinearVelocity(new Box2DX.Common.Vec2(Mathf.Cos(EulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(EulerAngles.z * Mathf.Deg2Rad)) * MoveSpeed);
+        }
 
-                dist = Math.Sqrt(Math.Pow(Mission.Objects[objID].Position.x - Position.x, 2) + Math.Pow(Mission.Objects[objID].Position.y - Position.y, 2));
-                if(dist < Mission.Objects[objID].Size.x / 2F) {
-                    Mission.Objects[objID].Destroyed = true;
-                }
-            }
-            foreach (string objID in Mission.DynamicObjects.Keys) {
-                if (Mission.DynamicObjects[objID] == this || !Mission.DynamicObjects[objID].CanBreaked) continue;
+        public override void Update (float deltaTime) {
 
-                dist = Math.Sqrt(Math.Pow(Mission.DynamicObjects[objID].Position.x - Position.x, 2) + Math.Pow(Mission.DynamicObjects[objID].Position.y - Position.y, 2));
-                if (dist < Mission.Objects[objID].Size.x / 2F) {
-                    Mission.DynamicObjects[objID].Destroyed = true;
-                }
-            }
+        }
+
+        public override void OnCollide (BaseMissionObject other) {
+            //if (other.CanBreaked) other.Destroyed = true;
+            //Destroyed = true;
         }
     }
 }

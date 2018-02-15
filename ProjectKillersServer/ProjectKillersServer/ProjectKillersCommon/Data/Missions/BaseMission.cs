@@ -3,6 +3,7 @@ using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Box2DX.Dynamics;
 
 namespace ProjectKillersCommon.Data.Missions {
     [Serializable]
@@ -16,10 +17,23 @@ namespace ProjectKillersCommon.Data.Missions {
         [ProtoMember(3)]
         public Dictionary<string, BaseMissionObject> DynamicObjects = new Dictionary<string, BaseMissionObject>();
 
+        private object objLock = new object();
         private object dynLock = new object();
 
-        public virtual void AddDynamicObject(BaseMissionObject obj) {
+        public virtual void AddObject (BaseMissionObject obj, World world) {
+            lock (objLock) {
+                obj.SetupPhysics(world);
+                obj.Mission = this;
+
+                Objects.Add(obj.ID, obj);
+            }
+        }
+
+        public virtual void AddDynamicObject(BaseMissionObject obj, World world) {
             lock(dynLock) {
+                obj.SetupPhysics(world);
+                obj.Mission = this;
+
                 DynamicObjects.Add(obj.ID, obj);
             }
         }
@@ -28,10 +42,12 @@ namespace ProjectKillersCommon.Data.Missions {
             lock (dynLock) {
                 foreach (var o in Objects.Where(x => x.Value.Destroyed).ToList()) {
                     Objects.Remove(o.Key);
+                    o.Value.OnDestroy();
                 }
 
                 foreach (var o in DynamicObjects.Where(x => x.Value.Destroyed).ToList()) {
                     DynamicObjects.Remove(o.Key);
+                    o.Value.OnDestroy();
                 }
 
                 foreach (BaseMissionObject obj in Objects.Values.ToList()) obj.Update(deltaTime);

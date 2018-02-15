@@ -3,10 +3,13 @@ using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data.Missions;
+using UnityEngine;
+using Box2DX.Dynamics;
+using Box2DX.Collision;
 
 namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
-    [ProtoContract(SkipConstructor = true)]
+    [ProtoContract(SkipConstructor = true, UseProtoMembersOnly = true)]
     [ProtoInclude(101, typeof(BulletObject))]
     [ProtoInclude(102, typeof(TestObject))]
     public abstract class BaseMissionObject {
@@ -34,6 +37,15 @@ namespace ProjectKillersCommon.Data.Objects {
 
         public BaseMission Mission;
 
+        //PHYSICS
+        public bool IsStatic = false;
+
+        protected BodyDef bodyDef;
+        protected CircleDef circleDef;
+        protected Body body;
+
+        protected World world;
+
         public BaseMissionObject(Vector3K position, Vector3K center, Vector3K size, Vector3K eulerAngles) {
             ID = Guid.NewGuid().ToString();
 
@@ -43,7 +55,53 @@ namespace ProjectKillersCommon.Data.Objects {
             EulerAngles = eulerAngles;
         }
 
+        //must called for work physics 
+        public virtual void SetupPhysics(World world) {
+            float angle = EulerAngles.z;
+            angle = angle * Mathf.Deg2Rad;
+
+            bodyDef = new BodyDef();
+            bodyDef.Position.Set(Position.x, Position.y);
+            bodyDef.Angle = angle;
+
+            circleDef = new CircleDef();
+            circleDef.Restitution = 0.2f;
+            circleDef.Friction = 0.3f;
+            circleDef.Density = 0.5f;
+            circleDef.Radius = Mathf.Max(Size.x / 3F, Size.y / 3F, Size.z / 3F);
+
+            body = world.CreateBody(bodyDef);
+
+            while(body==null) {
+                body = world.CreateBody(bodyDef);
+            }
+
+            body.CreateShape(circleDef);
+            body.SetMassFromShapes();
+            body.SetUserData(this);
+
+            this.world = world;
+        }
+
+        public void SetPosition(Vector3K position) {
+            Position = position;
+
+            if (Mathf.Abs(Position.x) > 5000 || Mathf.Abs(Position.y) > 5000) {
+                Destroyed = true;
+                world.DestroyBody(body);
+                return;
+            }
+
+            if (body != null)
+                body.SetXForm(new Box2DX.Common.Vec2(position.x, position.y), EulerAngles.z * Mathf.Deg2Rad);
+        }
+
         public abstract void DoRequest(Dictionary<string, object> request);
         public abstract void Update(float deltaTime);
+
+        public virtual void OnDestroy() {
+            world.DestroyBody(body);
+        }
+        public virtual void OnCollide(BaseMissionObject other) { }
     }
 }

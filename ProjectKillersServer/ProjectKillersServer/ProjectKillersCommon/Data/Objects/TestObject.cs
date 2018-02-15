@@ -17,6 +17,8 @@ namespace ProjectKillersCommon.Data.Objects {
 
             Name = "Test Object";
             NameID = "TestObject";
+
+            IsStatic = true;
         }
 
         public override void DoRequest(Dictionary<string, object> request) {

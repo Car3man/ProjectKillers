@@ -1,0 +1,14 @@
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/ProjectKillersCommon.dll.config
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/ProjectKillersCommon.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/ProjectKillersCommon.pdb
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/Box2DX.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/protobuf-net.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/SwiftKernelCommon.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/UnityEngine.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/protobuf-net.pdb
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/protobuf-net.xml
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/SwiftKernelCommon.pdb
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Release/Box2DX.pdb
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Release/ProjectKillersCommon.csproj.CoreCompileInputs.cache
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Release/ProjectKillersCommon.dll
+/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Release/ProjectKillersCommon.pdb
