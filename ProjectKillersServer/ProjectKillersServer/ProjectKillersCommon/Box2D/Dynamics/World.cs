@@ -44,7 +44,7 @@ namespace Box2DX.Dynamics
 	/// </summary>
 	public class World : IDisposable
 	{
-		internal bool _lock;
+        internal object _lock = new object();
 
 		internal BroadPhase _broadPhase;
 		private ContactManager _contactManager;
@@ -117,8 +117,6 @@ namespace Box2DX.Dynamics
 
 			_allowSleep = doSleep;
 			_gravity = gravity;
-
-			_lock = false;
 
 			_inv_dt0 = 0.0f;
 
@@ -198,25 +196,20 @@ namespace Box2DX.Dynamics
 		/// <returns></returns>
 		public Body CreateBody(BodyDef def)
 		{
-			Box2DXDebug.Assert(_lock == false);
-			if (_lock == true)
-			{
-				return null;
-			}
+            lock(_lock) {
+                Body b = new Body(def, this);
 
-			Body b = new Body(def, this);
+                // Add to world doubly linked list.
+                b._prev = null;
+                b._next = _bodyList;
+                if (_bodyList != null) {
+                    _bodyList._prev = b;
+                }
+                _bodyList = b;
+                ++_bodyCount;
 
-			// Add to world doubly linked list.
-			b._prev = null;
-			b._next = _bodyList;
-			if (_bodyList != null)
-			{
-				_bodyList._prev = b;
-			}
-			_bodyList = b;
-			++_bodyCount;
-
-			return b;
+                return b;
+            }
 		}
 
 		/// <summary>
@@ -228,69 +221,58 @@ namespace Box2DX.Dynamics
 		/// <param name="b"></param>
 		public void DestroyBody(Body b)
 		{
-			Box2DXDebug.Assert(_bodyCount > 0);
-			Box2DXDebug.Assert(_lock == false);
-			if (_lock == true)
-			{
-				return;
-			}
+            lock (_lock) {
 
-			// Delete the attached joints.
-			JointEdge jn = null;
-			if (b._jointList != null)
-				jn = b._jointList;
-			while (jn != null)
-			{
-				JointEdge jn0 = jn;
-				jn = jn.Next;
+                // Delete the attached joints.
+                JointEdge jn = null;
+                if (b._jointList != null)
+                    jn = b._jointList;
+                while (jn != null) {
+                    JointEdge jn0 = jn;
+                    jn = jn.Next;
 
-				if (_destructionListener != null)
-				{
-					_destructionListener.SayGoodbye(jn0.Joint);
-				}
+                    if (_destructionListener != null) {
+                        _destructionListener.SayGoodbye(jn0.Joint);
+                    }
 
-				DestroyJoint(jn0.Joint);
-			}
+                    DestroyJoint(jn0.Joint);
+                }
 
-			// Delete the attached shapes. This destroys broad-phase
-			// proxies and pairs, leading to the destruction of contacts.
-			Shape s = null;
-			if (b._shapeList != null)
-				s = b._shapeList;
-			while (s != null)
-			{
-				Shape s0 = s;
-				s = s._next;
+                // Delete the attached shapes. This destroys broad-phase
+                // proxies and pairs, leading to the destruction of contacts.
+                Shape s = null;
+                if (b._shapeList != null)
+                    s = b._shapeList;
+                while (s != null) {
+                    Shape s0 = s;
+                    s = s._next;
 
-				if (_destructionListener != null)
-				{
-					_destructionListener.SayGoodbye(s0);
-				}
+                    if (_destructionListener != null) {
+                        _destructionListener.SayGoodbye(s0);
+                    }
 
-				s0.DestroyProxy(_broadPhase);
-				Shape.Destroy(s0);
-			}
+                    s0.DestroyProxy(_broadPhase);
+                    Shape.Destroy(s0);
+                }
 
-			// Remove world body list.
-			if (b._prev != null)
-			{
-				b._prev._next = b._next;
-			}
+                // Remove world body list.
+                if (b._prev != null) {
+                    b._prev._next = b._next;
+                }
 
-			if (b._next != null)
-			{
-				b._next._prev = b._prev;
-			}
+                if (b._next != null) {
+                    b._next._prev = b._prev;
+                }
 
-			if (b == _bodyList)
-			{
-				_bodyList = b._next;
-			}
+                if (b == _bodyList) {
+                    _bodyList = b._next;
+                }
 
-			--_bodyCount;
-			if (b is IDisposable)
-				(b as IDisposable).Dispose();
-			b = null;
+                --_bodyCount;
+                if (b is IDisposable)
+                    (b as IDisposable).Dispose();
+                b = null;
+            }
 		}
 
 		/// <summary>
@@ -302,49 +284,47 @@ namespace Box2DX.Dynamics
 		/// <returns></returns>
 		public Joint CreateJoint(JointDef def)
 		{
-			Box2DXDebug.Assert(_lock == false);
+            lock (_lock) {
 
-			Joint j = Joint.Create(def);
+                Joint j = Joint.Create(def);
 
-			// Connect to the world list.
-			j._prev = null;
-			j._next = _jointList;
-			if (_jointList != null)
-			{
-				_jointList._prev = j;
-			}
-			_jointList = j;
-			++_jointCount;
+                // Connect to the world list.
+                j._prev = null;
+                j._next = _jointList;
+                if (_jointList != null) {
+                    _jointList._prev = j;
+                }
+                _jointList = j;
+                ++_jointCount;
 
-			// Connect to the bodies' doubly linked lists.
-			j._node1.Joint = j;
-			j._node1.Other = j._body2;
-			j._node1.Prev = null;
-			j._node1.Next = j._body1._jointList;
-			if (j._body1._jointList != null)
-				j._body1._jointList.Prev = j._node1;
-			j._body1._jointList = j._node1;
+                // Connect to the bodies' doubly linked lists.
+                j._node1.Joint = j;
+                j._node1.Other = j._body2;
+                j._node1.Prev = null;
+                j._node1.Next = j._body1._jointList;
+                if (j._body1._jointList != null)
+                    j._body1._jointList.Prev = j._node1;
+                j._body1._jointList = j._node1;
 
-			j._node2.Joint = j;
-			j._node2.Other = j._body1;
-			j._node2.Prev = null;
-			j._node2.Next = j._body2._jointList;
-			if (j._body2._jointList != null)
-				j._body2._jointList.Prev = j._node2;
-			j._body2._jointList = j._node2;
+                j._node2.Joint = j;
+                j._node2.Other = j._body1;
+                j._node2.Prev = null;
+                j._node2.Next = j._body2._jointList;
+                if (j._body2._jointList != null)
+                    j._body2._jointList.Prev = j._node2;
+                j._body2._jointList = j._node2;
 
-			// If the joint prevents collisions, then reset collision filtering.
-			if (def.CollideConnected == false)
-			{
-				// Reset the proxies on the body with the minimum number of shapes.
-				Body b = def.Body1._shapeCount < def.Body2._shapeCount ? def.Body1 : def.Body2;
-				for (Shape s = b._shapeList; s != null; s = s._next)
-				{
-					s.RefilterProxy(_broadPhase, b.GetXForm());
-				}
-			}
+                // If the joint prevents collisions, then reset collision filtering.
+                if (def.CollideConnected == false) {
+                    // Reset the proxies on the body with the minimum number of shapes.
+                    Body b = def.Body1._shapeCount < def.Body2._shapeCount ? def.Body1 : def.Body2;
+                    for (Shape s = b._shapeList; s != null; s = s._next) {
+                        s.RefilterProxy(_broadPhase, b.GetXForm());
+                    }
+                }
 
-			return j;
+                return j;
+            }
 		}
 
 		/// <summary>
@@ -354,87 +334,77 @@ namespace Box2DX.Dynamics
 		/// <param name="j"></param>
 		public void DestroyJoint(Joint j)
 		{
-			Box2DXDebug.Assert(_lock == false);
+            lock (_lock) {
 
-			bool collideConnected = j._collideConnected;
+                bool collideConnected = j._collideConnected;
 
-			// Remove from the doubly linked list.
-			if (j._prev != null)
-			{
-				j._prev._next = j._next;
-			}
+                // Remove from the doubly linked list.
+                if (j._prev != null) {
+                    j._prev._next = j._next;
+                }
 
-			if (j._next != null)
-			{
-				j._next._prev = j._prev;
-			}
+                if (j._next != null) {
+                    j._next._prev = j._prev;
+                }
 
-			if (j == _jointList)
-			{
-				_jointList = j._next;
-			}
+                if (j == _jointList) {
+                    _jointList = j._next;
+                }
 
-			// Disconnect from island graph.
-			Body body1 = j._body1;
-			Body body2 = j._body2;
+                // Disconnect from island graph.
+                Body body1 = j._body1;
+                Body body2 = j._body2;
 
-			// Wake up connected bodies.
-			body1.WakeUp();
-			body2.WakeUp();
+                // Wake up connected bodies.
+                body1.WakeUp();
+                body2.WakeUp();
 
-			// Remove from body 1.
-			if (j._node1.Prev != null)
-			{
-				j._node1.Prev.Next = j._node1.Next;
-			}
+                // Remove from body 1.
+                if (j._node1.Prev != null) {
+                    j._node1.Prev.Next = j._node1.Next;
+                }
 
-			if (j._node1.Next != null)
-			{
-				j._node1.Next.Prev = j._node1.Prev;
-			}
+                if (j._node1.Next != null) {
+                    j._node1.Next.Prev = j._node1.Prev;
+                }
 
-			if (j._node1 == body1._jointList)
-			{
-				body1._jointList = j._node1.Next;
-			}
+                if (j._node1 == body1._jointList) {
+                    body1._jointList = j._node1.Next;
+                }
 
-			j._node1.Prev = null;
-			j._node1.Next = null;
+                j._node1.Prev = null;
+                j._node1.Next = null;
 
-			// Remove from body 2
-			if (j._node2.Prev != null)
-			{
-				j._node2.Prev.Next = j._node2.Next;
-			}
+                // Remove from body 2
+                if (j._node2.Prev != null) {
+                    j._node2.Prev.Next = j._node2.Next;
+                }
 
-			if (j._node2.Next != null)
-			{
-				j._node2.Next.Prev = j._node2.Prev;
-			}
+                if (j._node2.Next != null) {
+                    j._node2.Next.Prev = j._node2.Prev;
+                }
 
-			if (j._node2 == body2._jointList)
-			{
-				body2._jointList = j._node2.Next;
-			}
+                if (j._node2 == body2._jointList) {
+                    body2._jointList = j._node2.Next;
+                }
 
-			j._node2.Prev = null;
-			j._node2.Next = null;
+                j._node2.Prev = null;
+                j._node2.Next = null;
 
-			Joint.Destroy(j);
+                Joint.Destroy(j);
 
-			Box2DXDebug.Assert(_jointCount > 0);
-			--_jointCount;
+                Box2DXDebug.Assert(_jointCount > 0);
+                --_jointCount;
 
-			// If the joint prevents collisions, then reset collision filtering.
-			if (collideConnected == false)
-			{
-				// Reset the proxies on the body with the minimum number of shapes.
-				Body b = body1._shapeCount < body2._shapeCount ? body1 : body2;
-				for (Shape s = b._shapeList; s != null; s = s._next)
-				{
-					s.RefilterProxy(_broadPhase, b.GetXForm());
-				}
-			}
+                // If the joint prevents collisions, then reset collision filtering.
+                if (collideConnected == false) {
+                    // Reset the proxies on the body with the minimum number of shapes.
+                    Body b = body1._shapeCount < body2._shapeCount ? body1 : body2;
+                    for (Shape s = b._shapeList; s != null; s = s._next) {
+                        s.RefilterProxy(_broadPhase, b.GetXForm());
+                    }
+                }
+            }
 		}
 
 		/// <summary>
@@ -472,7 +442,6 @@ namespace Box2DX.Dynamics
 		/// </summary>		
 		public void Refilter(Shape shape)
 		{
-			Box2DXDebug.Assert(_lock == false);
 			shape.RefilterProxy(_broadPhase, shape.GetBody().GetXForm());
 		}
 
@@ -529,45 +498,41 @@ namespace Box2DX.Dynamics
 		/// <param name="iterations">For the positionconstraint solver.</param>
 		public void Step(float dt, int velocityIterations, int positionIteration)
 		{
-			_lock = true;
+            lock (_lock) {
 
-			TimeStep step = new TimeStep();
-			step.Dt = dt;
-			step.VelocityIterations = velocityIterations;
-			step.PositionIterations = positionIteration;
-			if (dt > 0.0f)
-			{
-				step.Inv_Dt = 1.0f / dt;
-			}
-			else
-			{
-				step.Inv_Dt = 0.0f;
-			}
+                TimeStep step = new TimeStep();
+                step.Dt = dt;
+                step.VelocityIterations = velocityIterations;
+                step.PositionIterations = positionIteration;
+                if (dt > 0.0f) {
+                    step.Inv_Dt = 1.0f / dt;
+                } else {
+                    step.Inv_Dt = 0.0f;
+                }
 
-			step.DtRatio = _inv_dt0 * dt;
+                step.DtRatio = _inv_dt0 * dt;
 
-			step.WarmStarting = _warmStarting;
+                step.WarmStarting = _warmStarting;
 
-			// Update contacts.
-			_contactManager.Collide();
+                // Update contacts.
+                _contactManager.Collide();
 
-			// Integrate velocities, solve velocity constraints, and integrate positions.
-			if (step.Dt > 0.0f)
-			{
-				Solve(step);
-			}
+                // Integrate velocities, solve velocity constraints, and integrate positions.
+                if (step.Dt > 0.0f) {
+                    Solve(step);
+                }
 
-			// Handle TOI events.
-			if (_continuousPhysics && step.Dt > 0.0f)
-			{
-				SolveTOI(step);
-			}
+                // Handle TOI events.
+                if (_continuousPhysics && step.Dt > 0.0f) {
+                    SolveTOI(step);
+                }
 
-			// Draw debug information.
-			DrawDebugData();
+                // Draw debug information.
+                DrawDebugData();
 
-			_inv_dt0 = step.Inv_Dt;
-			_lock = false;
+                _inv_dt0 = step.Inv_Dt;
+                _lock = false;
+            }
 		}
 
 		/// Query the world for all shapes that potentially overlap the

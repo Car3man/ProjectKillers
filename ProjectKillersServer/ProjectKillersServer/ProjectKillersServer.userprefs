@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{087E331F-5A25-4C68-B351-5FC37E14F3C2}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersCommon/Box2D/Dynamics/Body.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersCommon/Data/Objects/BulletObject.cs">
     <Files>
       <File FileName="ProjectKillersServer/Events/LeaveMissionHandler.cs" Line="25" Column="1" />
       <File FileName="ProjectKillersServer/EntryPoint.cs" Line="53" Column="36" />
@@ -16,40 +16,10 @@
       <File FileName="ProjectKillersCommon/Data/Objects/BaseMissionObject.cs" Line="96" Column="53" />
       <File FileName="ProjectKillersCommon/Box2D/Collision/BroadPhase.cs" Line="1028" Column="23" />
       <File FileName="ProjectKillersCommon/Box2D/Collision/Shapes/Shape.cs" Line="334" Column="26" />
-      <File FileName="ProjectKillersCommon/Box2D/Dynamics/Body.cs" Line="291" Column="13" />
+      <File FileName="ProjectKillersCommon/Box2D/Dynamics/Body.cs" Line="272" Column="26" />
+      <File FileName="ProjectKillersCommon/Box2D/Dynamics/World.cs" Line="535" Column="14" />
+      <File FileName="ProjectKillersCommon/Data/Objects/BulletObject.cs" Line="43" Column="22" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="ProjectKillersServer" expanded="True">
-            <Node name="ProjectKillersCommon" expanded="True">
-              <Node name="References" expanded="True" />
-              <Node name="Box2D" expanded="True">
-                <Node name="Collision" expanded="True">
-                  <Node name="Shapes" expanded="True" />
-                </Node>
-                <Node name="Common" expanded="True" />
-                <Node name="Dynamics" expanded="True">
-                  <Node name="Body.cs" selected="True" />
-                </Node>
-              </Node>
-              <Node name="Data" expanded="True">
-                <Node name="Missions" expanded="True" />
-                <Node name="Objects" expanded="True" />
-              </Node>
-            </Node>
-            <Node name="ProjectKillersServer" expanded="True">
-              <Node name="References" expanded="True" />
-              <Node name="Physics" expanded="True" />
-              <Node name="RequestHandlers" expanded="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -41,8 +41,8 @@ namespace ProjectKillersCommon.Data.Objects {
         }
 
         public override void OnCollide (BaseMissionObject other) {
-            //if (other.CanBreaked) other.Destroyed = true;
-            //Destroyed = true;
+            if (other.CanBreaked) other.Destroyed = true;
+            Destroyed = true;
         }
     }
 }

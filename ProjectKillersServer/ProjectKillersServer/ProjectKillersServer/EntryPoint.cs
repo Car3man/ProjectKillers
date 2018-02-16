@@ -53,11 +53,6 @@ namespace SwiftKernelServerProject {
             TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
             TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
 
-            for (int i = 0; i < 150;i++){
-                TestObject obj = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-                Mission.AddObject(obj, Physics.World);
-            }
-
             Mission.AddObject(testObj1, Physics.World);
             Mission.AddObject(testObj2, Physics.World);
             Mission.AddObject(testObj3, Physics.World);
