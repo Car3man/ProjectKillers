@@ -14,8 +14,6 @@ namespace ProjectKillersServer.Physics {
             }
         }
 
-        public const int Iterat = 25;
-
         public Physics (float x, float y, float w, float h, float g_x, float g_y, bool doSleep) {
             AABB aabb = new AABB();
             aabb.LowerBound.Set(x, y); 
@@ -25,7 +23,7 @@ namespace ProjectKillersServer.Physics {
         }
 
         public void Update (float deltaTime) {
-            world.Step(deltaTime, Iterat, Iterat);
+            world.Step(deltaTime, 20, 20);
 
             for (Body list = world.GetBodyList(); list != null; list = list.GetNext()) {
                 if (list.GetUserData() != null) { 

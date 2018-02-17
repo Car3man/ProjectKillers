@@ -16,7 +16,7 @@ namespace ProjectKillersCommon {
         public Vector3K EulerAngles;
         [ProtoMember(3)]
         public string ID;
-        [ProtoMember(4)]
+
         public bool Actualy = false;
 
         public Client(NetPeer peer, Vector3K position, Vector3K eulerAngles, string id) {
@@ -24,6 +24,7 @@ namespace ProjectKillersCommon {
             Position = position;
             EulerAngles = eulerAngles;
             ID = id;
+            Actualy = false;
         }
 
         public Client(NetPeer peer) {

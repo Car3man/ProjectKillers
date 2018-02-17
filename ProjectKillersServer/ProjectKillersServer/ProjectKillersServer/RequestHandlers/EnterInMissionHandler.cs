@@ -23,7 +23,7 @@ namespace ProjectKillersServer.RequestHandlers {
             client.ID = id;
 
             NetData allResponse = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
-            NetData playerResponse = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) }, { "clients", new ObjectWrapper<List<Client>>(actualyClients) }, { "mission", new ObjectWrapper<BaseMission>(EntryPoint.Mission) } });
+            NetData playerResponse = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) }, { "clients", new ObjectWrapper<List<Client>>(actualyClients) } });
 
             EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
             EntryPoint.SendResponse(new List<Client>() { client }, Utils.ToBytesJSON(playerResponse), networkID);

@@ -11,7 +11,6 @@ using UnityEngine;
 
 public class GameManager : LocalSingletonBehaviour<GameManager> {
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private int sendRateMission = 10;
 
     private List<Player> players = new List<Player>();
     private string syncPlayerNetworkID = "";
@@ -48,22 +47,11 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(NetManager.I.ID) } })), requestID);
     }
 
-    private IEnumerator MissionUpdater() {
-        while (true) {
-            for (int i = 0; i < 60 / sendRateMission; i++)
-                yield return new WaitForEndOfFrame();
-            if (!string.IsNullOrEmpty(SyncMissionNetworkID))
-                NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(NetManager.I.ID) } })), SyncMissionNetworkID);
-        }
-    }
-
     private void OnEnterMission(byte[] data) {
         NetData ndata = Utils.FromBytesJSON<NetData>(data);
 
         if (ndata.Values.ContainsKey("clients")) {
             List<Client> clients = (List<Client>)ndata.Values["clients"].ObjectValue ?? new List<Client>();
-
-            Debug.Log(clients);
 
             foreach (Client c in clients) {
                 SpawnPlayer(c.ID, Vector3.zero);
@@ -71,10 +59,8 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
             syncPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleSyncPlayers, false);
             shootPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleShootPlayer, false);
-            syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleSyncMission, false);
+            syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleSyncMission, false);
 			leaveMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleLeaveMission, false);
-
-            StartCoroutine(MissionUpdater());
         } else {
             SpawnPlayer((string)ndata.Values["id"].ObjectValue, Vector3.zero);
         }
@@ -103,7 +89,7 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
     }
 
     private void HandleSyncMission(byte[] data) {
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
+        NetDataEvent ndata = Utils.FromBytesJSON<NetDataEvent>(data);
 
         BaseMission mission = (BaseMission)ndata.Values["mission"].ObjectValue;
 
@@ -127,8 +113,7 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
                     NetworkObjectDispenser.I.DestroyObject(o.Value.ID);
                 } else {
                     NetworkMissionObject obj = NetworkObjectDispenser.I.Objects[o.Value.ID];
-                    obj.transform.position = o.Value.Position.FromServerVector3();
-                    obj.transform.eulerAngles = o.Value.EulerAngles.FromServerVector3();
+                    obj.SyncTransform(o.Value.Position.FromServerVector3(), o.Value.EulerAngles.FromServerVector3());
                 }
             }
         }

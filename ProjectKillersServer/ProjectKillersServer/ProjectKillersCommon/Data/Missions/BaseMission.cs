@@ -39,16 +39,16 @@ namespace ProjectKillersCommon.Data.Missions {
         }
 
         public virtual void Update(float deltaTime) {
-            lock (dynLock) {
+            lock(objLock) {
                 foreach (var o in Objects.Where(x => x.Value.Destroyed && x.Value.Changed && !x.Value.NotObserve).ToList()) {
                     o.Value.OnDestroy();
                 }
-
-                foreach (var o in DynamicObjects.Where(x => x.Value.Destroyed && x.Value.Changed&& !x.Value.NotObserve).ToList()) {
-                    o.Value.OnDestroy();
-                }
-
                 foreach (BaseMissionObject obj in Objects.Values.Where(x => !x.Destroyed)) obj.Update(deltaTime);
+            }
+            lock (dynLock) {
+                foreach (var o in DynamicObjects.Where(x => x.Value.Destroyed && x.Value.Changed && !x.Value.NotObserve).ToList()) {
+                    o.Value.OnDestroy();
+                } 
                 foreach (BaseMissionObject obj in DynamicObjects.Values.Where(x => !x.Destroyed)) obj.Update(deltaTime);
             }
         }
@@ -59,17 +59,21 @@ namespace ProjectKillersCommon.Data.Missions {
             mission.Objects = new Dictionary<string, BaseMissionObject>();
             mission.DynamicObjects = new Dictionary<string, BaseMissionObject>();
 
-            foreach(string k in Objects.Keys) {
-                if (Objects[k].Changed) {
-                    mission.Objects.Add(k, Objects[k]);
-                    Objects[k].Changed = false;
+            lock (objLock) {
+                foreach (string k in Objects.Keys) {
+                    if (Objects[k].Changed) {
+                        mission.Objects.Add(k, Objects[k]);
+                        Objects[k].Changed = false;
+                    }
                 }
             }
 
-            foreach (string k in DynamicObjects.Keys) {
-                if (DynamicObjects[k].Changed) {
-                    mission.DynamicObjects.Add(k, DynamicObjects[k]);
-                    DynamicObjects[k].Changed = false;
+            lock (dynLock) {
+                foreach (string k in DynamicObjects.Keys) {
+                    if (DynamicObjects[k].Changed) {
+                        mission.DynamicObjects.Add(k, DynamicObjects[k]);
+                        DynamicObjects[k].Changed = false;
+                    }
                 }
             }
 

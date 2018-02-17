@@ -54,12 +54,12 @@
     <Compile Include="RequestHandlers\EnterInMissionHandler.cs" />
     <Compile Include="RequestHandlers\InteractObjectHandler.cs" />
     <Compile Include="RequestHandlers\ShootHandler.cs" />
-    <Compile Include="RequestHandlers\SyncMissionHandler.cs" />
     <Compile Include="RequestHandlers\SyncPlayerHandler.cs" />
     <Compile Include="ServerUpdater.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\PhysicsSolver.cs" />
     <Compile Include="Physics\CollisionHandler.cs" />
+    <Compile Include="Events\SyncMissionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

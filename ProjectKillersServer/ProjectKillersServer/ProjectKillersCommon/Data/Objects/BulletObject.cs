@@ -10,7 +10,7 @@ namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
     [ProtoContract(SkipConstructor = true)]
     public class BulletObject : BaseMissionObject {
-        public float MoveSpeed = 10F;
+        public float MoveSpeed = 35f;
 
         public BulletObject(Vector3K position, Vector3K center, Vector3K size, Vector3K eulerAngles) : base(position, center, size, eulerAngles) {
             ID = Guid.NewGuid().ToString();
@@ -42,6 +42,7 @@ namespace ProjectKillersCommon.Data.Objects {
         public override void SetupPhysics (Box2DX.Dynamics.World world) {
             base.SetupPhysics(world);
 
+            body.SetBullet(true);
             body.SetLinearVelocity(new Box2DX.Common.Vec2(Mathf.Cos(EulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(EulerAngles.z * Mathf.Deg2Rad)) * MoveSpeed);
         }
 

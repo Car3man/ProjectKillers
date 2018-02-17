@@ -18,11 +18,8 @@ public class Player : MonoBehaviour {
 
     private Vector3 newPosition;
     private Vector3 newEulerAngles;
-    private float lastTimeUpdate;
 
     private void Start() {
-        lastTimeUpdate = Time.time;
-
         newPosition = transform.position;
         newEulerAngles = transform.eulerAngles;
     }

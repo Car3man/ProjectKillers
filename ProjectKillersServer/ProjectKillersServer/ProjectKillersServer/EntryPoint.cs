@@ -40,6 +40,7 @@ namespace SwiftKernelServerProject {
             Mission.Objects = new Dictionary<string, BaseMissionObject>();
 
             updater.OnUpdate += Mission.Update;
+            updater.OnUpdate += SyncMissionHandler.Update;
             updater.OnUpdate += Physics.Update;
 
             TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
@@ -102,7 +103,6 @@ namespace SwiftKernelServerProject {
                 case RequestTypes.SyncPlayer: SyncPlayerHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.Shoot: ShootHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.InteractObject: InteractObjectHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.SyncMission: SyncMissionHandler.DoHandle(ndata, client, networkID); break;
             }
         }
 
