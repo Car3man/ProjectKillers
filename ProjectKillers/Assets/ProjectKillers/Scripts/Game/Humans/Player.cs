@@ -71,8 +71,6 @@ public class Player : MonoBehaviour {
     private void RequestShoot() {
         NetData data = new NetData(RequestTypes.Shoot, new System.Collections.Generic.Dictionary<string, ObjectWrapper>());
         data.Values["id"] = new ObjectWrapper<string>(NetManager.I.ID);
-        data.Values["position"] = new ObjectWrapper<Vector3K>(bulletPoint.transform.position.ToServerVector3());
-        data.Values["eulerAngles"] = new ObjectWrapper<Vector3K>(bulletPoint.transform.eulerAngles.ToServerVector3());
         NetManager.I.Client.SendRequest(Utils.ToBytesJSON(data), GameManager.I.ShootPlayerNetworkID);
     }
 
