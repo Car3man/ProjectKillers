@@ -8,6 +8,7 @@ namespace ProjectKillersCommon {
     [ProtoContract(SkipConstructor = true)]
     public class Client {
         public NetPeer Peer;
+        public bool MissionFirstInited = false;
 
         [ProtoMember(1)]
         public Vector3K Position;

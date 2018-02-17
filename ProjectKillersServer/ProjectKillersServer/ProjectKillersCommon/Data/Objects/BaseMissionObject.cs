@@ -36,6 +36,9 @@ namespace ProjectKillersCommon.Data.Objects {
         public bool CanBreaked = true;
 
         public BaseMission Mission;
+        public bool Changed = false;
+        public bool NotObserve = false;
+        public float LifeTime = 0f;
 
         //PHYSICS
         public bool IsStatic = false;
@@ -53,6 +56,8 @@ namespace ProjectKillersCommon.Data.Objects {
             Center = center;
             Size = size;
             EulerAngles = eulerAngles;
+
+            Changed = true;
         }
 
         //must called for work physics 
@@ -84,11 +89,14 @@ namespace ProjectKillersCommon.Data.Objects {
         }
 
         public void SetPosition(Vector3K position) {
+            if(Vector3K.Distance(Position, position) > 0.01F){
+                Changed = true;
+            }
+
             Position = position;
 
-            if (Mathf.Abs(Position.x) > 5000 || Mathf.Abs(Position.y) > 5000) {
-                Destroyed = true;
-                world.DestroyBody(body);
+            if (Mathf.Abs(Position.x) > 1000 || Mathf.Abs(Position.y) > 1000) {
+                Destroy();
                 return;
             }
 
@@ -96,11 +104,19 @@ namespace ProjectKillersCommon.Data.Objects {
                 body.SetXForm(new Box2DX.Common.Vec2(position.x, position.y), EulerAngles.z * Mathf.Deg2Rad);
         }
 
+        public void Destroy(){
+            Destroyed = true;
+            Changed = true;
+        }
+
         public abstract void DoRequest(Dictionary<string, object> request);
-        public abstract void Update(float deltaTime);
+        public virtual void Update(float deltaTime) {
+            LifeTime += deltaTime;
+        }
 
         public virtual void OnDestroy() {
             world.DestroyBody(body);
+            NotObserve = true;
         }
         public virtual void OnCollide(BaseMissionObject other) { }
     }

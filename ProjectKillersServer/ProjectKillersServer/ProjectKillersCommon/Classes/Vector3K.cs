@@ -1,5 +1,6 @@
 ﻿using ProtoBuf;
 using System;
+using UnityEngine;
 
 namespace ProjectKillersCommon.Classes {
     [Serializable]
@@ -16,6 +17,10 @@ namespace ProjectKillersCommon.Classes {
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        public static float Distance (Vector3K vec1, Vector3K vec2) {
+            return Mathf.Sqrt(Mathf.Pow((vec2.x - vec1.x), 2) + Mathf.Pow((vec2.y - vec1.y), 2));
         }
     }
 }

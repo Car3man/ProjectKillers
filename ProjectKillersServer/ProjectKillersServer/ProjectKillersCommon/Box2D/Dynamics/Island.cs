@@ -173,13 +173,13 @@ namespace Box2DX.Dynamics
 		public int _jointCount;
 		public int _contactCount;
 
-		public int _bodyCapacity;
+        public long _bodyCapacity;
 		public int _contactCapacity;
 		public int _jointCapacity;
 
 		public int _positionIterationCount;
 
-		public Island(int bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
+        public Island(long bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
 		{
 			_bodyCapacity = bodyCapacity;
 			_contactCapacity = contactCapacity;

@@ -33,7 +33,7 @@ namespace SwiftKernelServerProject {
             PhysicsSolver = new PhysicsSolver();
             PhysicsSolver.OnAdd += CollisionHandler.OnCollide;
 
-            Physics = new Physics(-50000, -50000, 50000, 50000, 0, 0, false);
+            Physics = new Physics(-1100, -1100, 1100, 1100, 0, 0, false);
             Physics.SetSolver(PhysicsSolver);
 
             Mission = new TestMission();

@@ -60,7 +60,7 @@ namespace Box2DX.Dynamics
 		// Do not access
 		internal Contact _contactList;
 
-		private int _bodyCount;
+        private long _bodyCount;
 		internal int _contactCount;
 		private int _jointCount;
 
@@ -222,6 +222,8 @@ namespace Box2DX.Dynamics
 		public void DestroyBody(Body b)
 		{
             lock (_lock) {
+
+                Console.WriteLine("Destroy");
 
                 // Delete the attached joints.
                 JointEdge jn = null;
@@ -475,7 +477,7 @@ namespace Box2DX.Dynamics
 		/// Get the number of bodies.
 		/// </summary>
 		/// <returns></returns>
-		public int GetBodyCount() { return _bodyCount; }
+        public long GetBodyCount() { return _bodyCount; }
 
 		/// <summary>
 		/// Get the number joints.
@@ -644,7 +646,7 @@ namespace Box2DX.Dynamics
 			}
 
 			// Build and simulate all awake islands.
-			int stackSize = _bodyCount;
+            long stackSize = _bodyCount;
 			{
 				Body[] stack = new Body[stackSize];
 
@@ -798,7 +800,7 @@ namespace Box2DX.Dynamics
 			//To pop: 
 			//	poppedElement = queue[queueStart++];
 			//  --queueSize;
-			int queueCapacity = _bodyCount;
+            long queueCapacity = _bodyCount;
 			Body[] queue = new Body[queueCapacity];
 			for (Body b = _bodyList; b != null; b = b._next)
 			{

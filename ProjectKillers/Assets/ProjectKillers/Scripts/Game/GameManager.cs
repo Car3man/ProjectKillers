@@ -74,8 +74,6 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
             syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleSyncMission, false);
 			leaveMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleLeaveMission, false);
 
-            Debug.Log(leaveMissionNetworkID);
-
             StartCoroutine(MissionUpdater());
         } else {
             SpawnPlayer((string)ndata.Values["id"].ObjectValue, Vector3.zero);
@@ -108,13 +106,12 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         NetData ndata = Utils.FromBytesJSON<NetData>(data);
 
         BaseMission mission = (BaseMission)ndata.Values["mission"].ObjectValue;
+
+        if (mission.Objects == null) mission.Objects = new Dictionary<string, BaseMissionObject>();
+        if (mission.DynamicObjects == null) mission.DynamicObjects = new Dictionary<string, BaseMissionObject>();
+
         Dictionary<string, BaseMissionObject> objects = mission.Objects;
         MergeDictionary(objects, mission.DynamicObjects);
-
-        //destroy objects on client destroyed on server
-        foreach (var o in NetworkObjectDispenser.I.Objects.ToList()) {
-            if (!objects.ContainsKey(o.Value.ID)) NetworkObjectDispenser.I.DestroyObject(o.Value.ID);
-        }
 
         //instantiate objects on client created on server
         foreach (var o in objects.ToList()) {
@@ -126,9 +123,13 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         //sync exist objects
         foreach (var o in objects.ToList()) {
             if (NetworkObjectDispenser.I.Objects.ContainsKey(o.Value.ID)) {
-                NetworkMissionObject obj = NetworkObjectDispenser.I.Objects[o.Value.ID];
-                obj.transform.position = o.Value.Position.FromServerVector3();
-                obj.transform.eulerAngles = o.Value.EulerAngles.FromServerVector3();
+                if (o.Value.Destroyed) {
+                    NetworkObjectDispenser.I.DestroyObject(o.Value.ID);
+                } else {
+                    NetworkMissionObject obj = NetworkObjectDispenser.I.Objects[o.Value.ID];
+                    obj.transform.position = o.Value.Position.FromServerVector3();
+                    obj.transform.eulerAngles = o.Value.EulerAngles.FromServerVector3();
+                }
             }
         }
     }

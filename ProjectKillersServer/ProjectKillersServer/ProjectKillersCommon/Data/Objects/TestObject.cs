@@ -24,9 +24,5 @@ namespace ProjectKillersCommon.Data.Objects {
         public override void DoRequest(Dictionary<string, object> request) {
             
         }
-
-        public override void Update(float deltaTime) {
-
-        }
     }
 }

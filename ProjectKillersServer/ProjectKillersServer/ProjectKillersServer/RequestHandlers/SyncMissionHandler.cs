@@ -17,8 +17,19 @@ namespace ProjectKillersServer.RequestHandlers {
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            NetData allResponse = new NetData(RequestTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(EntryPoint.Mission) } });
-            EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
+            BaseMission mission = EntryPoint.Mission;
+            if(client.MissionFirstInited) {
+                mission = mission.GetMissionChanges();
+            }
+
+            client.MissionFirstInited = true;
+
+            NetData allResponse = new NetData(RequestTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(mission) } });
+            byte[] sendData = Utils.ToBytesJSON(allResponse);
+
+            //Console.WriteLine(sendData.Length);
+
+            EntryPoint.SendResponse(clients, sendData, networkID);
         }
     }
 }
