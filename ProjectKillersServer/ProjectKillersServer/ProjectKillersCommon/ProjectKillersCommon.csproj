@@ -59,6 +59,7 @@
     <Compile Include="Data\Missions\TestMission.cs" />
     <Compile Include="Data\Objects\BulletObject.cs" />
     <Compile Include="Data\Objects\TestObject.cs" />
+    <Compile Include="Data\Room.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="NetDataEvent.cs" />
     <Compile Include="NetData.cs" />
@@ -110,9 +111,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Box2D\" />
-    <Folder Include="Box2D\Collision\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using ProjectKillersServer.Physics;
 
 namespace SwiftKernelServerProject {
-    public class EntryPoint {
+    public class Server {
         private static object clientsLock = new object();
         public static object ClientsLock {
             get {
@@ -22,7 +22,7 @@ namespace SwiftKernelServerProject {
         }
 
         private static ServerUpdater updater;
-        public static SwiftKernelServer Server = null;
+        public static SwiftKernelServer SKServer = null;
 
         public static List<Client> Clients = new List<Client>();
         public static TestMission Mission = new TestMission();
@@ -72,14 +72,14 @@ namespace SwiftKernelServerProject {
             Mission.AddObject(testObj9, Physics.World);
             Mission.AddObject(testObj10, Physics.World);
 
-            Server = new SwiftKernelServer();
-            Server.Setup(6000, "pkillers");
+            SKServer = new SwiftKernelServer();
+            SKServer.Setup(6000, "pkillers");
 
-            Server.OnPeerConnected += Server_OnPeerConnected;
-            Server.OnPeerDisconnected += Server_OnPeerDisconnected;
-            Server.OnRequestReceived += Server_OnRequestReceived;
+            SKServer.OnPeerConnected += Server_OnPeerConnected;
+            SKServer.OnPeerDisconnected += Server_OnPeerDisconnected;
+            SKServer.OnRequestReceived += Server_OnRequestReceived;
 
-            Server.Start();
+            SKServer.Start();
         }
 
         private static void Server_OnPeerConnected(NetPeer peer) {
@@ -137,22 +137,22 @@ namespace SwiftKernelServerProject {
          
         public static void SendResponse(List<Client> clients, byte[] data, string networkID = "") {
             foreach(Client c in clients) {
-                Server.SendResponse(c.Peer, data, networkID);
+                SKServer.SendResponse(c.Peer, data, networkID);
             }
         }
 
         public static void SendEvent(List<Client> clients, byte[] data, string networkID = "") {
             foreach(Client c in clients) {
-                Server.SendEvent(c.Peer, data, networkID);
+                SKServer.SendEvent(c.Peer, data, networkID);
             }
         }
 
         public static void SendResponse(Client client, byte[] data, string networkID = "") {
-            Server.SendResponse(client.Peer, data, networkID);
+            SKServer.SendResponse(client.Peer, data, networkID);
         }
 
         public static void SendEvent(Client client, byte[] data, string networkID = "") {
-            Server.SendEvent(client.Peer, data, networkID);
+            SKServer.SendEvent(client.Peer, data, networkID);
         }
 
         #endregion

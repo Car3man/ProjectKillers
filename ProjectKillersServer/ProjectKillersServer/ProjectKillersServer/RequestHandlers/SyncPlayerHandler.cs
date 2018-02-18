@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 namespace ProjectKillersServer.RequestHandlers {
     public static class SyncPlayerHandler {
         public static void DoHandle(NetData data, Client client, string networkID) {
-            List<Client> clients = new List<Client>(EntryPoint.Clients);
+            List<Client> clients = new List<Client>(Server.Clients);
             clients.RemoveAll(x => !x.Actualy);
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            if (!EntryPoint.Mission.DynamicObjects.ContainsKey(id)) return;
+            if (!Server.Mission.DynamicObjects.ContainsKey(id)) return;
             if (client.CurrentPlayer == null) return;
 
             Vector3K position = (Vector3K)data.Values["position"].ObjectValue;

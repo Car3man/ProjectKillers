@@ -12,19 +12,19 @@ namespace ProjectKillersServer.Events {
         }
 
         public static void DoSync () {
-            BaseMission mission = EntryPoint.Mission;
+            BaseMission mission = Server.Mission;
             BaseMission missionChanges = mission.GetMissionChanges();
 
-            lock (EntryPoint.ClientsLock) {
-                for (int i = 0; i < EntryPoint.Clients.Count; i++) {
-                    if (EntryPoint.Clients[i] != null && EntryPoint.Clients[i].Actualy) {
-                        NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(EntryPoint.Clients[i].MissionFirstInited ? mission : missionChanges) } });
+            lock (Server.ClientsLock) {
+                for (int i = 0; i < Server.Clients.Count; i++) {
+                    if (Server.Clients[i] != null && Server.Clients[i].Actualy) {
+                        NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(Server.Clients[i].MissionFirstInited ? mission : missionChanges) } });
 
-                        lock(EntryPoint.Clients[i].MissionFirstInited ? mission.Locker : missionChanges.Locker) {
-                            EntryPoint.SendEvent(EntryPoint.Clients[i], Utils.ToBytesJSON(allResponse), "GameManagerHandleSyncMission");
+                        lock(Server.Clients[i].MissionFirstInited ? mission.Locker : missionChanges.Locker) {
+                            Server.SendEvent(Server.Clients[i], Utils.ToBytesJSON(allResponse), "GameManagerHandleSyncMission");
                         }
 
-                        EntryPoint.Clients[i].MissionFirstInited = true;
+                        Server.Clients[i].MissionFirstInited = true;
                     }
                 }
             }
