@@ -10,8 +10,10 @@ namespace ProjectKillersCommon {
     [Serializable]
     [ProtoContract(SkipConstructor = true)]
     public class Client {
-        public NetPeer Peer;
+        [ProtoMember(1)]
         public string ID;
+
+        public NetPeer Peer;
         public bool Actualy = false;
         public bool MissionFirstInited = false;
         public BaseMission Mission;
@@ -37,6 +39,8 @@ namespace ProjectKillersCommon {
 
         public Client(NetPeer peer) {
             Peer = peer;
+
+            ID = Guid.NewGuid().ToString();
         }
 
         public void SetMission(BaseMission mission) {

@@ -30,7 +30,7 @@ namespace ProjectKillersServer.RequestHandlers {
             BulletObject bullet = new BulletObject(pos, new Vector3K(0f, 0f, 0f), new Vector3K(0.28f, 0.09f, 0f), rot);
             bullet.Mission = client.Mission;
 
-            client.Mission.AddDynamicObject(bullet, Server.Physics.World);
+            client.Mission.AddDynamicObject(bullet, client.Mission.Physics.World);
 
             NetData allResponse = new NetData(RequestTypes.Shoot, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
             Server.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);

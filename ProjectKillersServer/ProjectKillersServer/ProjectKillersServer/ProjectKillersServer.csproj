@@ -49,10 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\SendRoomsHandler.cs" />
+    <Compile Include="Events\SyncRoomHandler.cs" />
+    <Compile Include="MissionDispenser.cs" />
     <Compile Include="RequestHandlers\CreateRoomHandler.cs" />
     <Compile Include="RequestHandlers\EnterInRoomHandler.cs" />
     <Compile Include="RequestHandlers\GetRoomsHandler.cs" />
+    <Compile Include="RequestHandlers\LeaveRoomHandler.cs" />
     <Compile Include="RequestHandlers\StartMissionHandler.cs" />
+    <Compile Include="RequestHandlers\SyncRoomHandler.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Events\LeaveMissionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,9 +65,6 @@
     <Compile Include="RequestHandlers\ShootHandler.cs" />
     <Compile Include="RequestHandlers\SyncPlayerHandler.cs" />
     <Compile Include="ServerUpdater.cs" />
-    <Compile Include="Physics\Physics.cs" />
-    <Compile Include="Physics\PhysicsSolver.cs" />
-    <Compile Include="Physics\CollisionHandler.cs" />
     <Compile Include="Events\SyncMissionHandler.cs" />
   </ItemGroup>
   <ItemGroup>

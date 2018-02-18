@@ -6,6 +6,7 @@ using SwiftKernelServerProject;
 using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data.Objects;
+using ProjectKillersCommon.Data;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class EnterInMissionHandler {
@@ -21,12 +22,15 @@ namespace ProjectKillersServer.RequestHandlers {
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            client.ID = id;
+            Room clientRoom = Server.GetClientRoom(client);
 
-            PlayerObject player = new PlayerObject(new Vector3K(0f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(3.2f, 3.2f, 3.2f), new Vector3K(0f, 0f, 0f));
+            client.ID = id;
+            client.SetMission(MissionDispenser.GetMission(clientRoom.ID, clientRoom.MissionName));
+
+            PlayerObject player = new PlayerObject(new Vector3K(0f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(2f, 2f, 2f), new Vector3K(0f, 0f, 0f));
             player.OwnerID = client.ID;
 
-            client.Mission.AddDynamicObject(player, Server.Physics.World);
+            client.Mission.AddDynamicObject(player, client.Mission.Physics.World);
             client.ControlledObjects.Add(player.ID, player);
 
             NetData response = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });

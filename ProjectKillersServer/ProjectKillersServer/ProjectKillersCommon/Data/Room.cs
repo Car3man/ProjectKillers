@@ -21,6 +21,8 @@ namespace ProjectKillersCommon.Data {
         [ProtoMember(5)]
         public string MissionName;
 
+        public BaseMission Mission;
+
         public Room(string name, string ownerID) {
             ID = Guid.NewGuid().ToString();
 

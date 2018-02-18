@@ -4,6 +4,7 @@
         LeaveMission,
         SyncMission,
         SendRooms,
-        StartMission
+        StartMission,
+        SyncRoom
     }
 }

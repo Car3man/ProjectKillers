@@ -17,7 +17,7 @@ public class RoomHolder : MonoBehaviour {
         eventID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(OnSyncRoom, false);
 
         string requestID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnSyncRoom, true);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.SyncRoom, new Dictionary<string, ObjectWrapper>())), requestID);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.SyncRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(RoomID) } })), requestID);
     }
 
     private void OnSyncRoom(byte[] data) {
@@ -26,11 +26,11 @@ public class RoomHolder : MonoBehaviour {
         }
 
         NetData ndata = Utils.FromBytesJSON<NetData>(data);
-        List<Room> rooms = ndata.Values["rooms"].ObjectValue as List<Room>;
+        Room room = ndata.Values["room"].ObjectValue as Room;
 
-        foreach (Room r in rooms) {
+        foreach (Client c in room.Clients) {
             GameObject mobj = Instantiate(playerButtonPrefab, playerButtonContent);
-            mobj.GetComponent<RoomButton>().Init(r.Name);
+            mobj.GetComponent<PlayerButton>().Init(c.ID);
         }
     }
 
@@ -39,7 +39,7 @@ public class RoomHolder : MonoBehaviour {
     }
 
     public void OnButtonLeaveRoomClicked() {
-        MapManager.I.OnButtonLeaveRoomClicked();
+        MapManager.I.OnButtonLeaveRoomClicked(RoomID);
     }
 
     public void OnButtonRemoveRoomClicked() {

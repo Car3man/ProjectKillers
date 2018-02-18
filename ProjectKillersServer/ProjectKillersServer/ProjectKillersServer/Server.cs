@@ -28,24 +28,9 @@ namespace SwiftKernelServerProject {
         public static List<Client> Clients = new List<Client>();
         public static List<Room> Rooms = new List<Room>();
 
-        //PHYSICS
-        public static Physics Physics { get; private set; }
-        public static PhysicsSolver PhysicsSolver { get; private set; }
-        public static CollisionHandler CollisionHandler { get; private set; }
-
         private static void Main(string[] args) {
             Updater = new ServerUpdater();
-
-            CollisionHandler = new CollisionHandler();
-
-            PhysicsSolver = new PhysicsSolver();
-            PhysicsSolver.OnAdd += CollisionHandler.OnCollide;
-
-            Physics = new Physics(-1100, -1100, 1100, 1100, 0, 0, false);
-            Physics.SetSolver(PhysicsSolver);
-
             Updater.OnUpdate += SyncMissionHandler.Update;
-            Updater.OnUpdate += Physics.Update;
 
             SKServer = new SwiftKernelServer();
             SKServer.Setup(6000, "pkillers");
@@ -111,6 +96,8 @@ namespace SwiftKernelServerProject {
                 case RequestTypes.CreateRoom: CreateRoomHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.EnterInRoom: EnterInRoomHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.StartMission: StartMissionHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.LeaveRoom: LeaveRoomHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.SyncRoom: ProjectKillersServer.RequestHandlers.SyncRoomHandler.DoHandle(ndata, client, networkID); break;
             }
         }
 
@@ -134,6 +121,15 @@ namespace SwiftKernelServerProject {
 
         public static void SendEvent(Client client, byte[] data, string networkID = "") {
             SKServer.SendEvent(client.Peer, data, networkID);
+        }
+
+        public static Room GetClientRoom(Client client) {
+            foreach(Room r in Rooms) {
+                if (r.Clients.Contains(client)) {
+                    return r;
+                }
+            }
+            throw new Exception("no found client room");
         }
 
         #endregion
