@@ -5,6 +5,7 @@ using ProjectKillersCommon.Data.Missions;
 using SwiftKernelServerProject;
 using System;
 using System.Collections.Generic;
+using ProjectKillersCommon.Data.Objects;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class EnterInMissionHandler {
@@ -22,11 +23,14 @@ namespace ProjectKillersServer.RequestHandlers {
 
             client.ID = id;
 
-            NetData allResponse = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
-            NetData playerResponse = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) }, { "clients", new ObjectWrapper<List<Client>>(actualyClients) } });
+            PlayerObject player = new PlayerObject(new Vector3K(0f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(3.2f, 3.2f, 3.2f), new Vector3K(0f, 0f, 0f));
+            player.OwnerID = client.ID;
 
-            EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
-            EntryPoint.SendResponse(new List<Client>() { client }, Utils.ToBytesJSON(playerResponse), networkID);
+            EntryPoint.Mission.AddDynamicObject(player, EntryPoint.Physics.World);
+            client.ControlledObjects.Add(player.ID, player);
+
+            NetData response = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
+            EntryPoint.SendResponse(new List<Client>() { client }, Utils.ToBytesJSON(response), networkID);
         }
     }
 }

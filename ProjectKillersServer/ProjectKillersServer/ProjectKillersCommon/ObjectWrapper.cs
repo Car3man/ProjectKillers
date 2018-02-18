@@ -18,6 +18,7 @@ namespace ProjectKillersCommon {
     [ProtoInclude(7, typeof(ObjectWrapper<BaseMission>))]
     [ProtoInclude(8, typeof(ObjectWrapper<BaseMissionObject>))]
     [ProtoInclude(9, typeof(ObjectWrapper<List<Client>>))]
+    [ProtoInclude(10, typeof(ObjectWrapper<bool>))]
     public abstract class ObjectWrapper {
         protected ObjectWrapper() { }
         abstract public object ObjectValue { get; set; }

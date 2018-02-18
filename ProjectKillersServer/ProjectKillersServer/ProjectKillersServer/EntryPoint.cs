@@ -43,16 +43,16 @@ namespace SwiftKernelServerProject {
             updater.OnUpdate += SyncMissionHandler.Update;
             updater.OnUpdate += Physics.Update;
 
-            TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj2 = new TestObject(new Vector3K(2f, 4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj3 = new TestObject(new Vector3K(2f, 3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj4 = new TestObject(new Vector3K(2f, 2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj5 = new TestObject(new Vector3K(2f, 1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj6 = new TestObject(new Vector3K(2f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj7 = new TestObject(new Vector3K(2f, -1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj8 = new TestObject(new Vector3K(2f, -2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(1f, 1f, 1f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj2 = new TestObject(new Vector3K(2f, 4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj3 = new TestObject(new Vector3K(2f, 3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj4 = new TestObject(new Vector3K(2f, 2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj5 = new TestObject(new Vector3K(2f, 1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj6 = new TestObject(new Vector3K(2f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj7 = new TestObject(new Vector3K(2f, -1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj8 = new TestObject(new Vector3K(2f, -2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
 
             Mission.AddObject(testObj1, Physics.World);
             Mission.AddObject(testObj2, Physics.World);
@@ -85,6 +85,12 @@ namespace SwiftKernelServerProject {
             Console.WriteLine("Peer disconnected with ip {0}", peer.EndPoint.Host);
 
             Client client = Clients.Find(x => x.Peer == peer);
+
+            lock (Mission.DynamicObjectsLock) {
+                foreach (string k in client.ControlledObjects.Keys) {
+                    if (Mission.DynamicObjects.ContainsKey(k)) Mission.DynamicObjects[k].Destroy();
+                }
+            }
 
             LeaveMissionHandler.DoHandle(client, "GameManagerHandleLeaveMission");
 

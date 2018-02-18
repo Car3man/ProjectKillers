@@ -50,33 +50,9 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
     private void OnEnterMission(byte[] data) {
         NetData ndata = Utils.FromBytesJSON<NetData>(data);
 
-        if (ndata.Values.ContainsKey("clients")) {
-            List<Client> clients = (List<Client>)ndata.Values["clients"].ObjectValue ?? new List<Client>();
-
-            foreach (Client c in clients) {
-                SpawnPlayer(c.ID, Vector3.zero);
-            }
-
-            syncPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleSyncPlayers, false);
-            shootPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleShootPlayer, false);
-            syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleSyncMission, false);
-			leaveMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleLeaveMission, false);
-        } else {
-            SpawnPlayer((string)ndata.Values["id"].ObjectValue, Vector3.zero);
-        }
-    }
-
-    private void HandleSyncPlayers(byte[] data) {
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
-
-        Player pl = players.Find(x => x.ID.Equals((string)ndata.Values["id"].ObjectValue));
-        if (pl != null) {
-            Vector3K pos = (Vector3K)ndata.Values["position"].ObjectValue;
-            Vector3K rot = (Vector3K)ndata.Values["eulerAngles"].ObjectValue;
-
-            pl.ApplyPosition(pos.FromServerVector3());
-            pl.ApplyEulerAngles(rot.FromServerVector3());
-        }
+        syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleSyncMission, false);
+        shootPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleShootPlayer, false);
+        leaveMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleLeaveMission, false);
     }
 
     private void HandleShootPlayer(byte[] data) {
@@ -101,8 +77,14 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
         //instantiate objects on client created on server
         foreach (var o in objects.ToList()) {
+            bool isOwn = o.Value.OwnerID.Equals(NetManager.I.ID);
+
             if (!NetworkObjectDispenser.I.Objects.ContainsKey(o.Value.ID)) {
-                SpawnObject(o.Value.ID, o.Value.NameID, o.Value.Position.FromServerVector3(), o.Value.Center.FromServerVector3(), o.Value.Size.FromServerVector3(), o.Value.EulerAngles.FromServerVector3());
+                GameObject go = SpawnObject(o.Value.ID, o.Value.NameID, o.Value.Position.FromServerVector3(), o.Value.Center.FromServerVector3(), o.Value.Size.FromServerVector3(), o.Value.EulerAngles.FromServerVector3(), isOwn);
+            
+                if(o.Value is PlayerObject) {
+                    players.Add(go.GetComponent<Player>());
+                }
             }
         }
 
@@ -135,16 +117,7 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         }
     }
 
-    public void SpawnPlayer(string id, Vector3 pos) {
-        GameObject pl = Instantiate(playerPrefab);
-
-        pl.transform.position = pos;
-        pl.GetComponent<Player>().ID = id;
-
-        players.Add(pl.GetComponent<Player>());
-    }
-
-    public void SpawnObject(string id, string nameID, Vector3 pos, Vector3 center, Vector3 size, Vector3 eulerAngles) {
+    public GameObject SpawnObject(string id, string nameID, Vector3 pos, Vector3 center, Vector3 size, Vector3 eulerAngles, bool isOwn) {
         GameObject obj = NetworkObjectDispenser.I.GetObject(nameID, id);
         obj.transform.position = pos;
         obj.transform.eulerAngles = eulerAngles;
@@ -157,5 +130,8 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         obj.GetComponent<BoxCollider2D>().size = size;
 
         obj.GetComponent<NetworkMissionObject>().ID = id;
+        obj.GetComponent<NetworkMissionObject>().IsOwn = isOwn;
+
+        return obj;
     }
 }

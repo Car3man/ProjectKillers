@@ -20,6 +20,12 @@ namespace ProjectKillersCommon.Data.Missions {
         private object objLock = new object();
         private object dynLock = new object();
 
+        public object DynamicObjectsLock {
+            get {
+                return dynLock;
+            }
+        }
+
         public virtual void AddObject (BaseMissionObject obj, World world) {
             lock (objLock) {
                 obj.SetupPhysics(world);

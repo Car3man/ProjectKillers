@@ -15,15 +15,14 @@ namespace ProjectKillersServer.RequestHandlers {
             clients.RemoveAll(x => !x.Actualy);
 
             string id = (string)data.Values["id"].ObjectValue;
+
+            if (!EntryPoint.Mission.DynamicObjects.ContainsKey(id)) return;
+            if (client.CurrentPlayer == null) return;
+
             Vector3K position = (Vector3K)data.Values["position"].ObjectValue;
             Vector3K eulerAngles = (Vector3K)data.Values["eulerAngles"].ObjectValue;
 
-            client.Position = position;
-            client.EulerAngles = eulerAngles;
-
-            NetData allResponse = new NetData(RequestTypes.SyncPlayer, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) }, { "position", new ObjectWrapper<Vector3K>(position) }, { "eulerAngles", new ObjectWrapper<Vector3K>(eulerAngles) } });
-
-            EntryPoint.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
+            client.CurrentPlayer.SetTransform(position, eulerAngles);
         }
     }
 }

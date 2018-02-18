@@ -12,6 +12,7 @@ namespace ProjectKillersCommon.Data.Objects {
     [ProtoContract(SkipConstructor = true, UseProtoMembersOnly = true)]
     [ProtoInclude(101, typeof(BulletObject))]
     [ProtoInclude(102, typeof(TestObject))]
+    [ProtoInclude(103, typeof(PlayerObject))]
     public abstract class BaseMissionObject {
         [ProtoMember(1)]
         public string ID;
@@ -34,6 +35,8 @@ namespace ProjectKillersCommon.Data.Objects {
         public Vector3K Size;
         [ProtoMember(9)]
         public bool CanBreaked = true;
+        [ProtoMember(10)]
+        public string OwnerID = "";
 
         public BaseMission Mission;
         public bool Changed = false;
@@ -73,7 +76,7 @@ namespace ProjectKillersCommon.Data.Objects {
             circleDef.Restitution = 0.2f;
             circleDef.Friction = 0.3f;
             circleDef.Density = 0.5f;
-            circleDef.Radius = Mathf.Max(Size.x / 3F, Size.y / 3F, Size.z / 3F);
+            circleDef.Radius = Mathf.Max(Size.x / 3f, Size.y / 3f, Size.z / 3f);
 
             body = world.CreateBody(bodyDef);
 
@@ -88,20 +91,25 @@ namespace ProjectKillersCommon.Data.Objects {
             this.world = world;
         }
 
-        public void SetPosition(Vector3K position) {
+        public void SetTransform(Vector3K position, Vector3K eulerAngles) {
             if(Vector3K.Distance(Position, position) > 0.01F){
+                Changed = true;
+            }
+            if (Mathf.Abs(eulerAngles.z - EulerAngles.z) >= 0.01f) {
                 Changed = true;
             }
 
             Position = position;
+            EulerAngles = eulerAngles;
 
             if (Mathf.Abs(Position.x) > 1000 || Mathf.Abs(Position.y) > 1000) {
                 Destroy();
                 return;
             }
 
-            if (body != null)
+            if (body != null){
                 body.SetXForm(new Box2DX.Common.Vec2(position.x, position.y), EulerAngles.z * Mathf.Deg2Rad);
+            }
         }
 
         public void Destroy(){

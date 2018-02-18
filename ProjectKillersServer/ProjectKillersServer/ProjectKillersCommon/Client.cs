@@ -2,6 +2,8 @@
 using ProtoBuf;
 using SwiftKernelCommon.Core;
 using System;
+using System.Collections.Generic;
+using ProjectKillersCommon.Data.Objects;
 
 namespace ProjectKillersCommon {
     [Serializable]
@@ -9,20 +11,24 @@ namespace ProjectKillersCommon {
     public class Client {
         public NetPeer Peer;
         public bool MissionFirstInited = false;
-
-        [ProtoMember(1)]
-        public Vector3K Position;
-        [ProtoMember(2)]
-        public Vector3K EulerAngles;
-        [ProtoMember(3)]
         public string ID;
-
         public bool Actualy = false;
 
-        public Client(NetPeer peer, Vector3K position, Vector3K eulerAngles, string id) {
+        public Dictionary<string, BaseMissionObject> ControlledObjects = new Dictionary<string, BaseMissionObject>();
+
+        public PlayerObject CurrentPlayer {
+            get {
+                foreach (string key in ControlledObjects.Keys) {
+                    if (ControlledObjects[key] is PlayerObject) {
+                        return ControlledObjects[key] as PlayerObject;
+                    }
+                }
+                return null;
+            }
+        }
+
+        public Client(NetPeer peer, string id) {
             Peer = peer;
-            Position = position;
-            EulerAngles = eulerAngles;
             ID = id;
             Actualy = false;
         }

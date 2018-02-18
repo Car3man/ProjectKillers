@@ -1,24 +1,12 @@
 ﻿<Properties StartupConfiguration="{087E331F-5A25-4C68-B351-5FC37E14F3C2}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/Events/SyncMissionHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/EntryPoint.cs">
     <Files>
-      <File FileName="ProjectKillersCommon/Data/Objects/BulletObject.cs" Line="35" Column="18" />
-      <File FileName="ProjectKillersServer/Events/LeaveMissionHandler.cs" Line="1" Column="1" />
-      <File FileName="ProjectKillersServer/RequestHandlers/EnterInMissionHandler.cs" Line="29" Column="114" />
-      <File FileName="ProjectKillersCommon/Client.cs" Line="21" Column="9" />
-      <File FileName="ProjectKillersServer/RequestHandlers/SyncPlayerHandler.cs" Line="1" Column="1" />
-      <File FileName="ProjectKillersCommon/Data/Missions/BaseMission.cs" Line="51" Column="19" />
-      <File FileName="ProjectKillersCommon/Data/Objects/TestObject.cs" Line="26" Column="10" />
-      <File FileName="ProjectKillersCommon/Box2D/Dynamics/Island.cs" Line="193" Column="1" />
-      <File FileName="ProjectKillersCommon/Data/Objects/BaseMissionObject.cs" Line="87" Column="13" />
-      <File FileName="ProjectKillersCommon/Data/Missions/TestMission.cs" Line="1" Column="1" />
-      <File FileName="ProjectKillersServer/ServerUpdater.cs" Line="27" Column="31" />
-      <File FileName="ProjectKillersServer/RequestHandlers/InteractObjectHandler.cs" Line="20" Column="36" />
-      <File FileName="ProjectKillersCommon/Extensions/VectorExtensions.cs" Line="15" Column="62" />
-      <File FileName="ProjectKillersServer/RequestHandlers/ShootHandler.cs" Line="27" Column="34" />
-      <File FileName="ProjectKillersServer/Physics/Physics.cs" Line="26" Column="39" />
-      <File FileName="ProjectKillersServer/Events/SyncMissionHandler.cs" Line="26" Column="125" />
-      <File FileName="ProjectKillersServer/App.config" Line="1" Column="1" />
-      <File FileName="ProjectKillersServer/EntryPoint.cs" Line="89" Column="80" />
+      <File FileName="ProjectKillersServer/RequestHandlers/SyncPlayerHandler.cs" Line="25" Column="42" />
+      <File FileName="ProjectKillersServer/Events/SyncMissionHandler.cs" Line="30" Column="1" />
+      <File FileName="ProjectKillersCommon/Data/Missions/BaseMission.cs" Line="47" Column="14" />
+      <File FileName="ProjectKillersServer/EntryPoint.cs" Line="89" Column="1" />
+      <File FileName="ProjectKillersServer/RequestHandlers/EnterInMissionHandler.cs" Line="26" Column="132" />
+      <File FileName="ProjectKillersCommon/Data/Objects/BaseMissionObject.cs" Line="115" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

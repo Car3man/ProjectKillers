@@ -24,7 +24,7 @@ namespace ProjectKillersServer {
 
         private void UpdateThread() {
             while (CanUpdate) {
-                Thread.Sleep(5);
+                Thread.Sleep(15);
 
                 var currentTick = Environment.TickCount;
                 DeltaTime = (currentTick - lastTime) / 1000.0f;

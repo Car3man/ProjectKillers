@@ -24,7 +24,6 @@ E:/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon
 /Users/car3man/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll.config
 /Users/car3man/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll
 /Users/car3man/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.pdb
-/Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.csprojResolveAssemblyReference.cache
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.csproj.CoreCompileInputs.cache
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.dll
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.pdb

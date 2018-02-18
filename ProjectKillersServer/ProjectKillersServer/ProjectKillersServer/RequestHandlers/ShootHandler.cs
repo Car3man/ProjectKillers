@@ -18,8 +18,8 @@ namespace ProjectKillersServer.RequestHandlers {
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            Vector3K playerPos = client.Position;
-            Vector3K playerRot = client.EulerAngles;
+            Vector3K playerPos = client.CurrentPlayer.Position;
+            Vector3K playerRot = client.CurrentPlayer.EulerAngles;
 
             Vector3K pos = new Vector3K(1.3F, -0.55F, 0).RotateVector2(playerRot.z);
             Vector3K rot = new Vector3K(0f, 0f, playerRot.z - 0.067F);

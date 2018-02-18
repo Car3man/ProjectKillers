@@ -5,7 +5,8 @@ using UnityEngine;
 public class NetworkMissionObject : MonoBehaviour {
     public enum InterpolateTypes { None, Position, Rotation, Both }
 
-    [HideInInspector] public string ID;
+    public string ID;
+    public bool IsOwn;
 
     [SerializeField] private InterpolateTypes interpolateType;
     [SerializeField] protected float InterpolatePosition = 20F;
@@ -14,14 +15,12 @@ public class NetworkMissionObject : MonoBehaviour {
     private Vector3 newPosition;
     private Vector3 newRotation;
 
-    private void Start () {
+    public virtual void Start () {
         newPosition = transform.position;
         newRotation = transform.eulerAngles;
     }
 
-    private void Update () {
-        Vector3 lastPosition = transform.position;
-
+    public virtual void Update () {
         Interpolate();
     }
 

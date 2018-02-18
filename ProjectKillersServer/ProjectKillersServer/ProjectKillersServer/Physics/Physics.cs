@@ -1,4 +1,5 @@
-﻿using Box2DX.Collision;
+﻿using System.Threading;
+using Box2DX.Collision;
 using Box2DX.Common;
 using Box2DX.Dynamics;
 using ProjectKillersCommon.Classes;
@@ -23,16 +24,31 @@ namespace ProjectKillersServer.Physics {
         }
 
         public void Update (float deltaTime) {
-            world.Step(deltaTime, 20, 20);
+            world.Step(deltaTime, 15, 15);
 
             for (Body list = world.GetBodyList(); list != null; list = list.GetNext()) {
                 if (list.GetUserData() != null) { 
                     float angle = list.GetAngle() * 180.0f / (float)System.Math.PI; 
                     BaseMissionObject model = (BaseMissionObject)list.GetUserData();
-
-                    model.SetPosition(new Vector3K(list.GetPosition().X, list.GetPosition().Y, 0)); 
-                    model.EulerAngles = new Vector3K(0f, 0f, angle); 
+                    SetTransformModel(model, new Vector3K(list.GetPosition().X, list.GetPosition().Y, 0), new Vector3K(0f, 0f, angle));
                 }
+            }
+        }
+
+        public void SetTransformModel (BaseMissionObject model, Vector3K position, Vector3K eulerAngles) {
+            if (Vector3K.Distance(model.Position, position) > 0.01F) {
+                model.Changed = true;
+            }
+            if (Vector3K.Distance(model.EulerAngles, eulerAngles) > 0.01F) {
+                model.Changed = true;
+            }
+
+            model.Position = position;
+            model.EulerAngles = eulerAngles;
+
+            if (Math.Abs(model.Position.x) > 1000 || Math.Abs(model.Position.y) > 1000) {
+                model.Destroy();
+                return;
             }
         }
 
