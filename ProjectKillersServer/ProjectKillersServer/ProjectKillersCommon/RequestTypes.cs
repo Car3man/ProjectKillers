@@ -1,12 +1,18 @@
 ﻿namespace ProjectKillersCommon {
     public enum RequestTypes {
-        CreateLobby,
         EnterInLobby,
         StartMission,
         EnterInMission,
+        LeaveMission,
         SyncPlayer,
         Shoot,
         InteractObject,
-        SyncMission
+        SyncMission,
+        GetRooms,
+        CreateRoom,
+        EnterInRoom,
+        LeaveRoom,
+        RemoveRoom,
+        SyncRoom
     }
 }

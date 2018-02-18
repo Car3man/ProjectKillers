@@ -1,11 +1,10 @@
 ﻿using ProjectKillersCommon.Classes;
+using ProjectKillersCommon.Data;
 using ProjectKillersCommon.Data.Missions;
 using ProjectKillersCommon.Data.Objects;
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ProjectKillersCommon {
     [ProtoContract]
@@ -19,6 +18,8 @@ namespace ProjectKillersCommon {
     [ProtoInclude(8, typeof(ObjectWrapper<BaseMissionObject>))]
     [ProtoInclude(9, typeof(ObjectWrapper<List<Client>>))]
     [ProtoInclude(10, typeof(ObjectWrapper<bool>))]
+    [ProtoInclude(11, typeof(ObjectWrapper<List<Room>>))]
+    [ProtoInclude(12, typeof(ObjectWrapper<Room>))]
     public abstract class ObjectWrapper {
         protected ObjectWrapper() { }
         abstract public object ObjectValue { get; set; }

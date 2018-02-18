@@ -11,6 +11,7 @@ using SwiftKernelCommon.Core;
 using System;
 using System.Collections.Generic;
 using ProjectKillersServer.Physics;
+using ProjectKillersCommon.Data;
 
 namespace SwiftKernelServerProject {
     public class Server {
@@ -21,19 +22,19 @@ namespace SwiftKernelServerProject {
             }
         }
 
-        private static ServerUpdater updater;
-        public static SwiftKernelServer SKServer = null;
+        public static ServerUpdater Updater { get; private set; }
+        public static SwiftKernelServer SKServer { get; private set; }
 
         public static List<Client> Clients = new List<Client>();
-        public static TestMission Mission = new TestMission();
+        public static List<Room> Rooms = new List<Room>();
 
         //PHYSICS
-        public static Physics Physics;
-        public static PhysicsSolver PhysicsSolver;
-        public static CollisionHandler CollisionHandler;
+        public static Physics Physics { get; private set; }
+        public static PhysicsSolver PhysicsSolver { get; private set; }
+        public static CollisionHandler CollisionHandler { get; private set; }
 
         private static void Main(string[] args) {
-            updater = new ServerUpdater();
+            Updater = new ServerUpdater();
 
             CollisionHandler = new CollisionHandler();
 
@@ -43,34 +44,8 @@ namespace SwiftKernelServerProject {
             Physics = new Physics(-1100, -1100, 1100, 1100, 0, 0, false);
             Physics.SetSolver(PhysicsSolver);
 
-            Mission = new TestMission();
-            Mission.Objects = new Dictionary<string, BaseMissionObject>();
-
-            updater.OnUpdate += Mission.Update;
-            updater.OnUpdate += SyncMissionHandler.Update;
-            updater.OnUpdate += Physics.Update;
-
-            TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj2 = new TestObject(new Vector3K(2f, 4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj3 = new TestObject(new Vector3K(2f, 3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj4 = new TestObject(new Vector3K(2f, 2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj5 = new TestObject(new Vector3K(2f, 1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj6 = new TestObject(new Vector3K(2f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj7 = new TestObject(new Vector3K(2f, -1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj8 = new TestObject(new Vector3K(2f, -2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
-
-            Mission.AddObject(testObj1, Physics.World);
-            Mission.AddObject(testObj2, Physics.World);
-            Mission.AddObject(testObj3, Physics.World);
-            Mission.AddObject(testObj4, Physics.World);
-            Mission.AddObject(testObj5, Physics.World);
-            Mission.AddObject(testObj6, Physics.World);
-            Mission.AddObject(testObj7, Physics.World);
-            Mission.AddObject(testObj8, Physics.World);
-            Mission.AddObject(testObj9, Physics.World);
-            Mission.AddObject(testObj10, Physics.World);
+            Updater.OnUpdate += SyncMissionHandler.Update;
+            Updater.OnUpdate += Physics.Update;
 
             SKServer = new SwiftKernelServer();
             SKServer.Setup(6000, "pkillers");
@@ -78,6 +53,8 @@ namespace SwiftKernelServerProject {
             SKServer.OnPeerConnected += Server_OnPeerConnected;
             SKServer.OnPeerDisconnected += Server_OnPeerDisconnected;
             SKServer.OnRequestReceived += Server_OnRequestReceived;
+
+            Rooms.Add(new Room("Test Room", null));
 
             SKServer.Start();
         }
@@ -93,25 +70,25 @@ namespace SwiftKernelServerProject {
         }
 
         private static void Server_OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo) {
-            Console.WriteLine("Peer disconnected with ip {0}", peer.EndPoint.Host);
+            //Console.WriteLine("Peer disconnected with ip {0}", peer.EndPoint.Host);
 
-            Client client = null;
+            //Client client = null;
 
-            lock (ClientsLock) {
-                client = Clients.Find(x => x.Peer == peer);
-            }
+            //lock (ClientsLock) {
+            //    client = Clients.Find(x => x.Peer == peer);
+            //}
 
-            lock (Mission.Locker) {
-                foreach (string k in client.ControlledObjects.Keys) {
-                    if (Mission.DynamicObjects.ContainsKey(k)) Mission.DynamicObjects[k].Destroy();
-                }
-            }
+            //lock (Mission.Locker) {
+            //    foreach (string k in client.ControlledObjects.Keys) {
+            //        if (Mission.DynamicObjects.ContainsKey(k)) Mission.DynamicObjects[k].Destroy();
+            //    }
+            //}
 
-            LeaveMissionHandler.DoHandle(client, "GameManagerHandleLeaveMission");
+            //LeaveMissionHandler.DoHandle(client, "EventGameManagerHandleLeaveMission");
 
-            lock (ClientsLock) {
-                Clients.Remove(client);
-            }
+            //lock (ClientsLock) {
+            //    Clients.Remove(client);
+            //}
         }
 
         private static void Server_OnRequestReceived(NetPeer peer, byte[] data, string networkID) {
@@ -130,6 +107,10 @@ namespace SwiftKernelServerProject {
                 case RequestTypes.SyncPlayer: SyncPlayerHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.Shoot: ShootHandler.DoHandle(ndata, client, networkID); break;
                 case RequestTypes.InteractObject: InteractObjectHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.GetRooms: GetRoomsHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.CreateRoom: CreateRoomHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.EnterInRoom: EnterInRoomHandler.DoHandle(ndata, client, networkID); break;
+                case RequestTypes.StartMission: StartMissionHandler.DoHandle(ndata, client, networkID); break;
             }
         }
 

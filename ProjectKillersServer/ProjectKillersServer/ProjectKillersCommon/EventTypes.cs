@@ -2,6 +2,8 @@
     public enum EventTypes
     {
         LeaveMission,
-        SyncMission
+        SyncMission,
+        SendRooms,
+        StartMission
     }
 }

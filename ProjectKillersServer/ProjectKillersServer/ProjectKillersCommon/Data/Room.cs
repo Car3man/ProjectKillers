@@ -11,20 +11,24 @@ namespace ProjectKillersCommon.Data {
     [ProtoContract(SkipConstructor = true)]
     public class Room {
         [ProtoMember(1)]
-        public string Name;
+        public string ID;
         [ProtoMember(2)]
-        public Client Owner;
+        public string Name;
         [ProtoMember(3)]
-        public List<Client> Clients = new List<Client>();
+        public string OwnerID;
         [ProtoMember(4)]
+        public List<Client> Clients = new List<Client>();
+        [ProtoMember(5)]
         public string MissionName;
 
-        public Room(string name, Client owner) {
+        public Room(string name, string ownerID) {
+            ID = Guid.NewGuid().ToString();
+
             Name = name;
-            Owner = owner;
+            OwnerID = ownerID;
 
             //Mission list
-            List<Type> missions = Assembly.GetAssembly(typeof(BaseMission)).GetTypes().Where(t => t.IsSubclassOf(typeof(BaseMission))).ToList();
+            List<Type> missions = BaseMission.GetMissionTypes();
             if (missions.Count > 0)
                 MissionName = missions[0].Name;
         }

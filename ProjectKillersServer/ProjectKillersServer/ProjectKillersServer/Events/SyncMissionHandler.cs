@@ -12,16 +12,18 @@ namespace ProjectKillersServer.Events {
         }
 
         public static void DoSync () {
-            BaseMission mission = Server.Mission;
-            BaseMission missionChanges = mission.GetMissionChanges();
-
             lock (Server.ClientsLock) {
                 for (int i = 0; i < Server.Clients.Count; i++) {
+                    if (Server.Clients[i].Mission == null) continue;
+
+                    BaseMission mission = Server.Clients[i].Mission;
+                    BaseMission missionChanges = mission.GetMissionChanges();
+
                     if (Server.Clients[i] != null && Server.Clients[i].Actualy) {
                         NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(Server.Clients[i].MissionFirstInited ? mission : missionChanges) } });
 
                         lock(Server.Clients[i].MissionFirstInited ? mission.Locker : missionChanges.Locker) {
-                            Server.SendEvent(Server.Clients[i], Utils.ToBytesJSON(allResponse), "GameManagerHandleSyncMission");
+                            Server.SendEvent(Server.Clients[i], Utils.ToBytesJSON(allResponse), "EventGameManagerHandleSyncMission");
                         }
 
                         Server.Clients[i].MissionFirstInited = true;

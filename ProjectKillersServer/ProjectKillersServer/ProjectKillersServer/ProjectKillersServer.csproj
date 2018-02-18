@@ -48,6 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\SendRoomsHandler.cs" />
+    <Compile Include="RequestHandlers\CreateRoomHandler.cs" />
+    <Compile Include="RequestHandlers\EnterInRoomHandler.cs" />
+    <Compile Include="RequestHandlers\GetRoomsHandler.cs" />
+    <Compile Include="RequestHandlers\StartMissionHandler.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Events\LeaveMissionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

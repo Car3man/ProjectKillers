@@ -4,15 +4,17 @@ using SwiftKernelCommon.Core;
 using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data.Objects;
+using ProjectKillersCommon.Data.Missions;
 
 namespace ProjectKillersCommon {
     [Serializable]
     [ProtoContract(SkipConstructor = true)]
     public class Client {
         public NetPeer Peer;
-        public bool MissionFirstInited = false;
         public string ID;
         public bool Actualy = false;
+        public bool MissionFirstInited = false;
+        public BaseMission Mission;
 
         public Dictionary<string, BaseMissionObject> ControlledObjects = new Dictionary<string, BaseMissionObject>();
 
@@ -35,6 +37,11 @@ namespace ProjectKillersCommon {
 
         public Client(NetPeer peer) {
             Peer = peer;
+        }
+
+        public void SetMission(BaseMission mission) {
+            MissionFirstInited = false;
+            Mission = mission;
         }
     }
 }

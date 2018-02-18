@@ -26,7 +26,7 @@ namespace ProjectKillersServer.RequestHandlers {
             PlayerObject player = new PlayerObject(new Vector3K(0f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(3.2f, 3.2f, 3.2f), new Vector3K(0f, 0f, 0f));
             player.OwnerID = client.ID;
 
-            Server.Mission.AddDynamicObject(player, Server.Physics.World);
+            client.Mission.AddDynamicObject(player, Server.Physics.World);
             client.ControlledObjects.Add(player.ID, player);
 
             NetData response = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });

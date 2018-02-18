@@ -16,7 +16,7 @@ namespace ProjectKillersServer.RequestHandlers {
 
             string id = (string)data.Values["id"].ObjectValue;
 
-            if (!Server.Mission.DynamicObjects.ContainsKey(id)) return;
+            if (!client.Mission.DynamicObjects.ContainsKey(id)) return;
             if (client.CurrentPlayer == null) return;
 
             Vector3K position = (Vector3K)data.Values["position"].ObjectValue;

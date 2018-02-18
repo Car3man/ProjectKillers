@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Box2DX.Dynamics;
+using System.Reflection;
 
 namespace ProjectKillersCommon.Data.Missions {
     [Serializable]
@@ -78,6 +79,10 @@ namespace ProjectKillersCommon.Data.Missions {
             }
 
             return mission;
+        }
+
+        public static List<Type> GetMissionTypes() {
+            return Assembly.GetAssembly(typeof(BaseMission)).GetTypes().Where(t => t.IsSubclassOf(typeof(BaseMission))).ToList();
         }
     }
 }

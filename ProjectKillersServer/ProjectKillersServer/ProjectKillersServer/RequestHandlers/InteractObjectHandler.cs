@@ -17,8 +17,8 @@ namespace ProjectKillersServer.RequestHandlers {
             string objectId = (string)data.Values["objectId"].ObjectValue;
             Dictionary<string, object> request = (Dictionary<string, object>)data.Values["request"].ObjectValue;
 
-            if (Server.Mission.Objects.ContainsKey(objectId)) {
-                Server.Mission.Objects[objectId].DoRequest(request);
+            if (client.Mission.Objects.ContainsKey(objectId)) {
+                client.Mission.Objects[objectId].DoRequest(request);
             }
         }
     }
