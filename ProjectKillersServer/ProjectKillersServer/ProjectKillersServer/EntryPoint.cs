@@ -14,6 +14,13 @@ using ProjectKillersServer.Physics;
 
 namespace SwiftKernelServerProject {
     public class EntryPoint {
+        private static object clientsLock = new object();
+        public static object ClientsLock {
+            get {
+                return clientsLock;
+            }
+        }
+
         private static ServerUpdater updater;
         public static SwiftKernelServer Server = null;
 
@@ -43,16 +50,16 @@ namespace SwiftKernelServerProject {
             updater.OnUpdate += SyncMissionHandler.Update;
             updater.OnUpdate += Physics.Update;
 
-            TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj2 = new TestObject(new Vector3K(2f, 4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj3 = new TestObject(new Vector3K(2f, 3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj4 = new TestObject(new Vector3K(2f, 2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj5 = new TestObject(new Vector3K(2f, 1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj6 = new TestObject(new Vector3K(2f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj7 = new TestObject(new Vector3K(2f, -1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj8 = new TestObject(new Vector3K(2f, -2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
-            TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.64f, 0.64f, 0.64f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj2 = new TestObject(new Vector3K(2f, 4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj3 = new TestObject(new Vector3K(2f, 3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj4 = new TestObject(new Vector3K(2f, 2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj5 = new TestObject(new Vector3K(2f, 1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj6 = new TestObject(new Vector3K(2f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj7 = new TestObject(new Vector3K(2f, -1f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj8 = new TestObject(new Vector3K(2f, -2f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
+            TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
 
             Mission.AddObject(testObj1, Physics.World);
             Mission.AddObject(testObj2, Physics.World);
@@ -79,14 +86,22 @@ namespace SwiftKernelServerProject {
             Console.WriteLine("Peer connected with ip {0}", peer.EndPoint.Host);
 
             Clients.Add(new Client(peer));
+
+            lock (ClientsLock) {
+                Clients.Add(new Client(peer));
+            }
         }
 
         private static void Server_OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo) {
             Console.WriteLine("Peer disconnected with ip {0}", peer.EndPoint.Host);
 
-            Client client = Clients.Find(x => x.Peer == peer);
+            Client client = null;
 
-            lock (Mission.DynamicObjectsLock) {
+            lock (ClientsLock) {
+                client = Clients.Find(x => x.Peer == peer);
+            }
+
+            lock (Mission.Locker) {
                 foreach (string k in client.ControlledObjects.Keys) {
                     if (Mission.DynamicObjects.ContainsKey(k)) Mission.DynamicObjects[k].Destroy();
                 }
@@ -94,11 +109,17 @@ namespace SwiftKernelServerProject {
 
             LeaveMissionHandler.DoHandle(client, "GameManagerHandleLeaveMission");
 
-            Clients.Remove(client);
+            lock (ClientsLock) {
+                Clients.Remove(client);
+            }
         }
 
         private static void Server_OnRequestReceived(NetPeer peer, byte[] data, string networkID) {
-            Client client = Clients.Find(x => x.Peer == peer);
+            Client client = null;
+
+            lock (ClientsLock) {
+                client = Clients.Find(x => x.Peer == peer);
+            }
 
             if(client == null) return;
 
@@ -124,6 +145,14 @@ namespace SwiftKernelServerProject {
             foreach(Client c in clients) {
                 Server.SendEvent(c.Peer, data, networkID);
             }
+        }
+
+        public static void SendResponse(Client client, byte[] data, string networkID = "") {
+            Server.SendResponse(client.Peer, data, networkID);
+        }
+
+        public static void SendEvent(Client client, byte[] data, string networkID = "") {
+            Server.SendEvent(client.Peer, data, networkID);
         }
 
         #endregion

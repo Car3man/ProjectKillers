@@ -7,13 +7,6 @@ D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKill
 D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Debug/Newtonsoft.Json.xml
 D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Debug/SwiftKernel.pdb
 D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/bin/Debug/SwiftKernelCommon.pdb
-D:/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll
-D:/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.pdb
-D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.csproj.CoreCompileInputs.cache
-D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.dll
-D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.pdb
-D:/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.csprojResolveAssemblyReference.cache
-D:/Projects/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll.config
 E:/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll.config
 E:/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.dll
 E:/ProjectKillers/ProjectKillers/Assets/ProjectKillers/Plugins/ProjectKillersCommon.pdb
@@ -27,3 +20,10 @@ E:/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.csproj.CoreCompileInputs.cache
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.dll
 /Users/car3man/Projects/ProjectKillers/ProjectKillersServer/ProjectKillersServer/ProjectKillersCommon/obj/Debug/ProjectKillersCommon.pdb
+D:\Projects\ProjectKillers\ProjectKillers\Assets\ProjectKillers\Plugins\ProjectKillersCommon.dll.config
+D:\Projects\ProjectKillers\ProjectKillers\Assets\ProjectKillers\Plugins\ProjectKillersCommon.dll
+D:\Projects\ProjectKillers\ProjectKillers\Assets\ProjectKillers\Plugins\ProjectKillersCommon.pdb
+D:\Projects\ProjectKillers\ProjectKillersServer\ProjectKillersServer\ProjectKillersCommon\obj\Debug\ProjectKillersCommon.csprojResolveAssemblyReference.cache
+D:\Projects\ProjectKillers\ProjectKillersServer\ProjectKillersServer\ProjectKillersCommon\obj\Debug\ProjectKillersCommon.csproj.CoreCompileInputs.cache
+D:\Projects\ProjectKillers\ProjectKillersServer\ProjectKillersServer\ProjectKillersCommon\obj\Debug\ProjectKillersCommon.dll
+D:\Projects\ProjectKillers\ProjectKillersServer\ProjectKillersServer\ProjectKillersCommon\obj\Debug\ProjectKillersCommon.pdb

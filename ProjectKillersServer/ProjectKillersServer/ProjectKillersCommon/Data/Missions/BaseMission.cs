@@ -17,17 +17,16 @@ namespace ProjectKillersCommon.Data.Missions {
         [ProtoMember(3)]
         public Dictionary<string, BaseMissionObject> DynamicObjects = new Dictionary<string, BaseMissionObject>();
 
-        private object objLock = new object();
-        private object dynLock = new object();
+        private object locker = new object();
 
-        public object DynamicObjectsLock {
+        public object Locker {
             get {
-                return dynLock;
+                return locker;
             }
         }
 
         public virtual void AddObject (BaseMissionObject obj, World world) {
-            lock (objLock) {
+            lock (locker) {
                 obj.SetupPhysics(world);
                 obj.Mission = this;
 
@@ -36,7 +35,7 @@ namespace ProjectKillersCommon.Data.Missions {
         }
 
         public virtual void AddDynamicObject(BaseMissionObject obj, World world) {
-            lock(dynLock) {
+            lock(locker) {
                 obj.SetupPhysics(world);
                 obj.Mission = this;
 
@@ -45,16 +44,14 @@ namespace ProjectKillersCommon.Data.Missions {
         }
 
         public virtual void Update(float deltaTime) {
-            lock(objLock) {
+            lock(locker) {
                 foreach (var o in Objects.Where(x => x.Value.Destroyed && x.Value.Changed && !x.Value.NotObserve).ToList()) {
                     o.Value.OnDestroy();
                 }
-                foreach (BaseMissionObject obj in Objects.Values.Where(x => !x.Destroyed)) obj.Update(deltaTime);
-            }
-            lock (dynLock) {
                 foreach (var o in DynamicObjects.Where(x => x.Value.Destroyed && x.Value.Changed && !x.Value.NotObserve).ToList()) {
                     o.Value.OnDestroy();
-                } 
+                }
+                foreach (BaseMissionObject obj in Objects.Values.Where(x => !x.Destroyed)) obj.Update(deltaTime);
                 foreach (BaseMissionObject obj in DynamicObjects.Values.Where(x => !x.Destroyed)) obj.Update(deltaTime);
             }
         }
@@ -65,16 +62,13 @@ namespace ProjectKillersCommon.Data.Missions {
             mission.Objects = new Dictionary<string, BaseMissionObject>();
             mission.DynamicObjects = new Dictionary<string, BaseMissionObject>();
 
-            lock (objLock) {
+            lock (locker) {
                 foreach (string k in Objects.Keys) {
                     if (Objects[k].Changed) {
                         mission.Objects.Add(k, Objects[k]);
                         Objects[k].Changed = false;
                     }
                 }
-            }
-
-            lock (dynLock) {
                 foreach (string k in DynamicObjects.Keys) {
                     if (DynamicObjects[k].Changed) {
                         mission.DynamicObjects.Add(k, DynamicObjects[k]);

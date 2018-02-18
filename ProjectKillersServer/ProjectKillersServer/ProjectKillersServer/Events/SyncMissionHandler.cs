@@ -15,13 +15,17 @@ namespace ProjectKillersServer.Events {
             BaseMission mission = EntryPoint.Mission;
             BaseMission missionChanges = mission.GetMissionChanges();
 
-            foreach(Client client in EntryPoint.Clients) {
-                if(client != null && client.Actualy) {
-                    NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(client.MissionFirstInited ? mission : missionChanges) } });
-                    byte[] sendData = Utils.ToBytesJSON(allResponse);
-                    EntryPoint.SendEvent(new List<Client>() { client }, sendData, "GameManagerHandleSyncMission");
+            lock (EntryPoint.ClientsLock) {
+                for (int i = 0; i < EntryPoint.Clients.Count; i++) {
+                    if (EntryPoint.Clients[i] != null && EntryPoint.Clients[i].Actualy) {
+                        NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(EntryPoint.Clients[i].MissionFirstInited ? mission : missionChanges) } });
 
-                    client.MissionFirstInited = true;
+                        lock(EntryPoint.Clients[i].MissionFirstInited ? mission.Locker : missionChanges.Locker) {
+                            EntryPoint.SendEvent(EntryPoint.Clients[i], Utils.ToBytesJSON(allResponse), "GameManagerHandleSyncMission");
+                        }
+
+                        EntryPoint.Clients[i].MissionFirstInited = true;
+                    }
                 }
             }
         }

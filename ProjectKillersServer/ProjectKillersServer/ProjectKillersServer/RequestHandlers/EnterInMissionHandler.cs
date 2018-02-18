@@ -30,7 +30,7 @@ namespace ProjectKillersServer.RequestHandlers {
             client.ControlledObjects.Add(player.ID, player);
 
             NetData response = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
-            EntryPoint.SendResponse(new List<Client>() { client }, Utils.ToBytesJSON(response), networkID);
+            EntryPoint.SendResponse(client, Utils.ToBytesJSON(response), networkID);
         }
     }
 }
