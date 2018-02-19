@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class NetworkObjectDispenser : LocalSingletonBehaviour<NetworkObjectDispenser> {
     public Dictionary<string, NetworkMissionObject> Objects = new Dictionary<string, NetworkMissionObject>();
+    private List<string> destroyedObjects = new List<string>();
 
     public GameObject GetObject(string nameID, string id) {
         GameObject obj = Instantiate(Resources.Load<GameObject>(string.Format("NetworkObjectPrefabs/{0}", nameID)));
@@ -14,11 +15,20 @@ public class NetworkObjectDispenser : LocalSingletonBehaviour<NetworkObjectDispe
     }
 
     public void DestroyObject(string id) {
-        if(Objects.ContainsKey(id)) {
+        StartCoroutine(DelayDestroyObject(id));
+    }
+
+    private IEnumerator DelayDestroyObject(string id) {
+        if (destroyedObjects.Contains(id)) yield break;
+       
+        yield return new WaitForSeconds(0.01f);
+        if (Objects.ContainsKey(id)) {
             NetworkMissionObject obj = Objects[id];
 
             Objects.Remove(id);
             Destroy(obj.gameObject);
+
+            destroyedObjects.Add(id);
         }
     }
 }

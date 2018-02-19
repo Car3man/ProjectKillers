@@ -115,6 +115,7 @@ namespace ProjectKillersCommon.Data.Objects {
         public void Destroy(){
             Destroyed = true;
             Changed = true;
+            world.DestroyBody(body);
         }
 
         public abstract void DoRequest(Dictionary<string, object> request);
@@ -123,7 +124,6 @@ namespace ProjectKillersCommon.Data.Objects {
         }
 
         public virtual void OnDestroy() {
-            world.DestroyBody(body);
             NotObserve = true;
         }
         public virtual void OnCollide(BaseMissionObject other) { }

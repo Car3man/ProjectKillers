@@ -24,7 +24,7 @@ namespace ProjectKillersServer.Physics {
         }
 
         public void Update (float deltaTime) {
-            world.Step(deltaTime, 15, 15);
+            world.Step(deltaTime, 5, 5);
 
             for (Body list = world.GetBodyList(); list != null; list = list.GetNext()) {
                 if (list.GetUserData() != null) { 

@@ -77,6 +77,8 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
         //instantiate objects on client created on server
         foreach (var o in objects.ToList()) {
+            if (o.Value.Destroyed) continue;
+
             bool isOwn = o.Value.OwnerID.Equals(NetManager.I.ID);
 
             if (!NetworkObjectDispenser.I.Objects.ContainsKey(o.Value.ID)) {
