@@ -31,7 +31,11 @@ public class CreateRoomPanel : MonoBehaviour {
         Room room = new Room(roomNameInput.text, NetManager.I.ID);
         room.MissionName = missionDropDown.options[missionDropDown.value].text;
 
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.CreateRoom, new Dictionary<string, ObjectWrapper>() { { "room", new ObjectWrapper<Room>(room) } })));
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.CreateRoom, new Dictionary<string, ObjectWrapper>() { { "room", new ObjectWrapper<Room>(room) } })));
+        gameObject.SetActive(false);
+    }
+
+    public void OnButtonCloseClick() {
         gameObject.SetActive(false);
     }
 }

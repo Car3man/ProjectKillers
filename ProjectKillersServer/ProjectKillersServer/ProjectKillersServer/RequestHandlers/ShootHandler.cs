@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class ShootHandler {
-        public static void DoHandle(NetData data, Client client, string networkID) {
+        public static void DoHandle(NetDataRequest data, Client client, string networkID) {
             List<Client> clients = new List<Client>(Server.Clients);
             clients.RemoveAll(x => !x.Actualy);
 
@@ -32,7 +32,7 @@ namespace ProjectKillersServer.RequestHandlers {
 
             client.Mission.AddDynamicObject(bullet, client.Mission.Physics.World);
 
-            NetData allResponse = new NetData(RequestTypes.Shoot, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
+            NetDataRequest allResponse = new NetDataRequest(RequestTypes.Shoot, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
             Server.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);
         }
     }

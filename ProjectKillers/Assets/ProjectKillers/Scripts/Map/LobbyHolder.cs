@@ -15,7 +15,7 @@ public class LobbyHolder : MonoBehaviour {
         eventID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(OnGetRooms, false);
 
         string requestID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnGetRooms, true);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.GetRooms, new Dictionary<string, ObjectWrapper>())), requestID);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.GetRooms, new Dictionary<string, ObjectWrapper>())), requestID);
     }
 
     private void OnGetRooms(byte[] data) {
@@ -23,7 +23,7 @@ public class LobbyHolder : MonoBehaviour {
             Destroy(roomButtonContent.GetChild(i).gameObject);
         }
 
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
+        BaseNetData ndata = Utils.FromBytesJSON<BaseNetData>(data);
         List<Room> rooms = ndata.Values["rooms"].ObjectValue as List<Room>;
 
         foreach (Room r in rooms) {

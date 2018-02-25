@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class SyncPlayerHandler {
-        public static void DoHandle(NetData data, Client client, string networkID) {
+        public static void DoHandle(NetDataRequest data, Client client, string networkID) {
             List<Client> clients = new List<Client>(Server.Clients);
             clients.RemoveAll(x => !x.Actualy);
 

@@ -2,10 +2,9 @@
 using ProjectKillersCommon;
 using ProjectKillersCommon.Classes;
 using ProjectKillersCommon.Extensions;
-using SwiftKernelUnity.Core;
 using UnityEngine;
 
-public class Player : NetworkMissionObject {
+public class Player : NetworkMissionObject, IHumanObject {
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float moveError;
     [SerializeField] protected Animator feetAnimator;
@@ -26,7 +25,7 @@ public class Player : NetworkMissionObject {
             RequestShoot();
         }
 
-        NetData data = new NetData(RequestTypes.SyncPlayer, new System.Collections.Generic.Dictionary<string, ObjectWrapper>());
+        NetDataRequest data = new NetDataRequest(RequestTypes.SyncPlayer, new System.Collections.Generic.Dictionary<string, ObjectWrapper>());
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z - Camera.main.transform.position.z));
 
         data.Values["id"] = new ObjectWrapper<string>(ID);
@@ -37,7 +36,7 @@ public class Player : NetworkMissionObject {
     }
 
     private void RequestShoot() {
-        NetData data = new NetData(RequestTypes.Shoot, new System.Collections.Generic.Dictionary<string, ObjectWrapper>());
+        NetDataRequest data = new NetDataRequest(RequestTypes.Shoot, new System.Collections.Generic.Dictionary<string, ObjectWrapper>());
         data.Values["id"] = new ObjectWrapper<string>(ID);
         NetManager.I.Client.SendRequest(Utils.ToBytesJSON(data), GameManager.I.ShootPlayerNetworkID);
     }
@@ -55,5 +54,11 @@ public class Player : NetworkMissionObject {
 
     public void Animate(Vector3 delta) {
         feetAnimator.SetBool("Run", delta.magnitude > moveError);
+    }
+
+    public void SyncHealth(int health, int maxHealth) {
+        if (IsOwn) {
+            if (health <= 0) Debug.Log("Are you dead");
+        }
     }
 }

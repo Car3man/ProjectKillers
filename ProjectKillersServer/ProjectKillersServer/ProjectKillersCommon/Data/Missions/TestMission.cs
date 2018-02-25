@@ -21,6 +21,8 @@ namespace ProjectKillersCommon.Data.Missions {
             TestObject testObj9 = new TestObject(new Vector3K(2f, -3f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
             TestObject testObj10 = new TestObject(new Vector3K(2f, -4f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
 
+            SkeletonObject skeleton = new SkeletonObject(new Vector3K(-3F, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(2f, 2f, 2f), new Vector3K(0f, 0f, 0f));
+
             AddObject(testObj1, Physics.World);
             AddObject(testObj2, Physics.World);
             AddObject(testObj3, Physics.World);
@@ -31,6 +33,8 @@ namespace ProjectKillersCommon.Data.Missions {
             AddObject(testObj8, Physics.World);
             AddObject(testObj9, Physics.World);
             AddObject(testObj10, Physics.World);
+
+            AddDynamicObject(skeleton, Physics.World);
         }
     }
 }

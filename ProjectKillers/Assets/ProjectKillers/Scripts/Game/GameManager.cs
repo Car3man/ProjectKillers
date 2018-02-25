@@ -44,11 +44,11 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
     public override void DoAwake() {
         string requestID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnEnterMission, false);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(NetManager.I.ID) } })), requestID);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(NetManager.I.ID) } })), requestID);
     }
 
     private void OnEnterMission(byte[] data) {
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
+        NetDataRequest ndata = Utils.FromBytesJSON<NetDataRequest>(data);
 
         syncMissionNetworkID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(HandleSyncMission, false);
         shootPlayerNetworkID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(HandleShootPlayer, false);
@@ -56,7 +56,7 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
     }
 
     private void HandleShootPlayer(byte[] data) {
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
+        NetDataRequest ndata = Utils.FromBytesJSON<NetDataRequest>(data);
 
         Player pl = players.Find(x => x.ID.Equals((string)ndata.Values["id"].ObjectValue));
         if (pl != null) {
@@ -93,11 +93,15 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
         //sync exist objects
         foreach (var o in objects.ToList()) {
             if (NetworkObjectDispenser.I.Objects.ContainsKey(o.Value.ID)) {
+                NetworkMissionObject obj = NetworkObjectDispenser.I.Objects[o.Value.ID];
+                obj.SyncTransform(o.Value.Position.FromServerVector3(), o.Value.EulerAngles.FromServerVector3());
+
+                if (o.Value is IHuman) {
+                    (obj as IHumanObject).SyncHealth((o.Value as IHuman).Health, (o.Value as IHuman).MaxHealth);
+                }
+
                 if (o.Value.Destroyed) {
                     NetworkObjectDispenser.I.DestroyObject(o.Value.ID);
-                } else {
-                    NetworkMissionObject obj = NetworkObjectDispenser.I.Objects[o.Value.ID];
-                    obj.SyncTransform(o.Value.Position.FromServerVector3(), o.Value.EulerAngles.FromServerVector3());
                 }
             }
         }

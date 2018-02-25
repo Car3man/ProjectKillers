@@ -20,12 +20,12 @@ public class MapManager : LocalSingletonBehaviour<MapManager> {
     //вход в комнату по кнопке
     public void OnButtonRoomClicked(string id) {
         string enterRoomId = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnEnteredInRoom, true);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.EnterInRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } })), enterRoomId);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.EnterInRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } })), enterRoomId);
     }
 
     //вошли в комнату
     private void OnEnteredInRoom(byte[] data) {
-        NetData netData = Utils.FromBytesJSON<NetData>(data);
+        NetDataRequest netData = Utils.FromBytesJSON<NetDataRequest>(data);
 
         lobbyHolder.gameObject.SetActive(false);
         roomHolder.GetComponent<RoomHolder>().RoomID = netData.Values["id"].ObjectValue as string;
@@ -42,12 +42,12 @@ public class MapManager : LocalSingletonBehaviour<MapManager> {
     //покидаем комнату
     public void OnButtonLeaveRoomClicked(string roomID) {
         string leaveRoomID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnLeavedRoom, true);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.LeaveRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(roomID) } })), leaveRoomID);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.LeaveRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(roomID) } })), leaveRoomID);
     }
 
     //покинули комнату
     private void OnLeavedRoom(byte[] data) {
-        NetData netData = Utils.FromBytesJSON<NetData>(data);
+        NetDataRequest netData = Utils.FromBytesJSON<NetDataRequest>(data);
 
         lobbyHolder.gameObject.SetActive(true);
         roomHolder.gameObject.SetActive(false);
@@ -57,7 +57,7 @@ public class MapManager : LocalSingletonBehaviour<MapManager> {
 
     //начинаем миссию
     public void OnButtonStartMissionClicked(string roomID) {
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.StartMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(roomID) } })));
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.StartMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(roomID) } })));
     }
 
     //начали миссию 

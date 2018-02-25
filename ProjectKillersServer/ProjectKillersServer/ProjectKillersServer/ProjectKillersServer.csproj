@@ -55,6 +55,7 @@
     <Compile Include="RequestHandlers\EnterInRoomHandler.cs" />
     <Compile Include="RequestHandlers\GetRoomsHandler.cs" />
     <Compile Include="RequestHandlers\LeaveRoomHandler.cs" />
+    <Compile Include="RequestHandlers\LoginHandler.cs" />
     <Compile Include="RequestHandlers\StartMissionHandler.cs" />
     <Compile Include="RequestHandlers\SyncRoomHandler.cs" />
     <Compile Include="Server.cs" />

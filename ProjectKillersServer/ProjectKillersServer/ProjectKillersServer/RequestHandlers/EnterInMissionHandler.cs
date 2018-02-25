@@ -10,7 +10,7 @@ using ProjectKillersCommon.Data;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class EnterInMissionHandler {
-        public static void DoHandle(NetData data, Client client, string networkID) {
+        public static void DoHandle(NetDataRequest data, Client client, string networkID) {
             client.Actualy = true;
 
             List<Client> clients = new List<Client>(Server.Clients);
@@ -33,7 +33,7 @@ namespace ProjectKillersServer.RequestHandlers {
             client.Mission.AddDynamicObject(player, client.Mission.Physics.World);
             client.ControlledObjects.Add(player.ID, player);
 
-            NetData response = new NetData(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
+            NetDataRequest response = new NetDataRequest(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
             Server.SendResponse(client, Utils.ToBytesJSON(response), networkID);
         }
     }

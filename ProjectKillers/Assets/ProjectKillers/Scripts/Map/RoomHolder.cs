@@ -17,7 +17,7 @@ public class RoomHolder : MonoBehaviour {
         eventID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(OnSyncRoom, false);
 
         string requestID = NetManager.I.Client.UnityEventReceiver.AddResponseObserver(OnSyncRoom, true);
-        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetData(RequestTypes.SyncRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(RoomID) } })), requestID);
+        NetManager.I.Client.SendRequest(Utils.ToBytesJSON(new NetDataRequest(RequestTypes.SyncRoom, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(RoomID) } })), requestID);
     }
 
     private void OnSyncRoom(byte[] data) {
@@ -25,12 +25,12 @@ public class RoomHolder : MonoBehaviour {
             Destroy(playerButtonContent.GetChild(i).gameObject);
         }
 
-        NetData ndata = Utils.FromBytesJSON<NetData>(data);
+        BaseNetData ndata = Utils.FromBytesJSON<BaseNetData>(data);
         Room room = ndata.Values["room"].ObjectValue as Room;
 
         foreach (Client c in room.Clients) {
             GameObject mobj = Instantiate(playerButtonPrefab, playerButtonContent);
-            mobj.GetComponent<PlayerButton>().Init(c.ID);
+            mobj.GetComponent<PlayerButton>().Init(c.Nickname);
         }
     }
 
@@ -43,6 +43,14 @@ public class RoomHolder : MonoBehaviour {
     }
 
     public void OnButtonRemoveRoomClicked() {
+
+    }
+
+    public void OnRoomNameInputChanged(string value) {
+
+    }
+
+    public void OnMissionTypeDropdownChanged(int value) {
 
     }
 

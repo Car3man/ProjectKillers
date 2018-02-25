@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class TransitionManager : LocalSingletonBehaviour<TransitionManager> {
     public const string SCENE_MAIN_MENU_NAME = "Menu";
     public const string SCENE_GAME_NAME = "Game";
-    public const string SCENE_MAP_NAME = "Map";
+    public const string SCENE_LOBBY_NAME = "Lobby";
 
     public void LoadMainMenu() {
         SceneManager.LoadScene(SCENE_MAIN_MENU_NAME);
@@ -16,7 +16,7 @@ public class TransitionManager : LocalSingletonBehaviour<TransitionManager> {
         SceneManager.LoadScene(SCENE_GAME_NAME);
     }
 
-    public void LoadMap() {
-        SceneManager.LoadScene(SCENE_MAP_NAME);
+    public void LoadLobby() {
+        SceneManager.LoadScene(SCENE_LOBBY_NAME);
     }
 }

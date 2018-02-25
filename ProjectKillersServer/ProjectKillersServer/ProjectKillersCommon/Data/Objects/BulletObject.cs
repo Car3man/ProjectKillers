@@ -50,6 +50,11 @@ namespace ProjectKillersCommon.Data.Objects {
             Console.WriteLine("Bullet collided with " + other.Name);
 
             if (other.CanBreaked) other.Destroy();
+            if (other is IHuman) {
+                (other as IHuman).Health -= 35;
+                Console.WriteLine("Health - {0}", (other as IHuman).Health);
+            }
+
             Destroy();
         }
     }

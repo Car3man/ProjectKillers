@@ -12,6 +12,8 @@ namespace ProjectKillersCommon {
     public class Client {
         [ProtoMember(1)]
         public string ID;
+        [ProtoMember(2)]
+        public string Nickname = "";
 
         public NetPeer Peer;
         public bool Actualy = false;
@@ -35,12 +37,16 @@ namespace ProjectKillersCommon {
             Peer = peer;
             ID = id;
             Actualy = false;
+
+            Nickname = "";
         }
 
         public Client(NetPeer peer) {
             Peer = peer;
 
             ID = Guid.NewGuid().ToString();
+
+            Nickname = "";
         }
 
         public void SetMission(BaseMission mission) {

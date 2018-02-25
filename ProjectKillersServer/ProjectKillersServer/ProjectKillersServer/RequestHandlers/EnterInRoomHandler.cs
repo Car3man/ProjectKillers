@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace ProjectKillersServer.RequestHandlers {
     public class EnterInRoomHandler {
-        public static void DoHandle(NetData data, Client client, string networkID) {
+        public static void DoHandle(NetDataRequest data, Client client, string networkID) {
             Room room = Server.Rooms.Find(x => x.ID.Equals(data.Values["id"].ObjectValue as string));
             room.Clients.Add(client);
 
-            Server.SendResponse(client, Utils.ToBytesJSON(new NetData(RequestTypes.EnterInRoom, data.Values)), networkID);
+            Server.SendResponse(client, Utils.ToBytesJSON(new NetDataRequest(RequestTypes.EnterInRoom, data.Values)), networkID);
             Events.SyncRoomHandler.DoHandle(room.ID, "EventRoomHolderOnSyncRoom");
         }
     }

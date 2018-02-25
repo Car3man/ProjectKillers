@@ -13,6 +13,7 @@
         EnterInRoom,
         LeaveRoom,
         RemoveRoom,
-        SyncRoom
+        SyncRoom,
+        Login
     }
 }

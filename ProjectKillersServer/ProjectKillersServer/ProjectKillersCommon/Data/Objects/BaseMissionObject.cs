@@ -13,6 +13,7 @@ namespace ProjectKillersCommon.Data.Objects {
     [ProtoInclude(101, typeof(BulletObject))]
     [ProtoInclude(102, typeof(TestObject))]
     [ProtoInclude(103, typeof(PlayerObject))]
+    [ProtoInclude(106, typeof(SkeletonObject))]
     public abstract class BaseMissionObject {
         [ProtoMember(1)]
         public string ID;

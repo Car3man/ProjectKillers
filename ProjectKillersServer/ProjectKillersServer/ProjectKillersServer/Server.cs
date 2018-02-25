@@ -1,8 +1,5 @@
 ﻿using Common;
 using ProjectKillersCommon;
-using ProjectKillersCommon.Classes;
-using ProjectKillersCommon.Data.Missions;
-using ProjectKillersCommon.Data.Objects;
 using ProjectKillersServer;
 using ProjectKillersServer.Events;
 using ProjectKillersServer.RequestHandlers;
@@ -10,7 +7,6 @@ using SwiftKernel.Core;
 using SwiftKernelCommon.Core;
 using System;
 using System.Collections.Generic;
-using ProjectKillersServer.Physics;
 using ProjectKillersCommon.Data;
 
 namespace SwiftKernelServerProject {
@@ -85,19 +81,25 @@ namespace SwiftKernelServerProject {
 
             if(client == null) return;
 
-            NetData ndata = Utils.FromBytesJSON<NetData>(data);
+            NetDataRequest ndata = Utils.FromBytesJSON<NetDataRequest>(data);
 
-            switch (ndata.Type) {
-                case RequestTypes.EnterInMission: EnterInMissionHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.SyncPlayer: SyncPlayerHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.Shoot: ShootHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.InteractObject: InteractObjectHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.GetRooms: GetRoomsHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.CreateRoom: CreateRoomHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.EnterInRoom: EnterInRoomHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.StartMission: StartMissionHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.LeaveRoom: LeaveRoomHandler.DoHandle(ndata, client, networkID); break;
-                case RequestTypes.SyncRoom: ProjectKillersServer.RequestHandlers.SyncRoomHandler.DoHandle(ndata, client, networkID); break;
+            if(string.IsNullOrEmpty(client.Nickname)) {
+                switch (ndata.Type) {
+                    case RequestTypes.Login: LoginHandler.DoHandle(ndata, client, networkID); break;
+                }
+            } else {
+                switch (ndata.Type) {
+                    case RequestTypes.EnterInMission: EnterInMissionHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.SyncPlayer: SyncPlayerHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.Shoot: ShootHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.InteractObject: InteractObjectHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.GetRooms: GetRoomsHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.CreateRoom: CreateRoomHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.EnterInRoom: EnterInRoomHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.StartMission: StartMissionHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.LeaveRoom: LeaveRoomHandler.DoHandle(ndata, client, networkID); break;
+                    case RequestTypes.SyncRoom: ProjectKillersServer.RequestHandlers.SyncRoomHandler.DoHandle(ndata, client, networkID); break;
+                }
             }
         }
 
