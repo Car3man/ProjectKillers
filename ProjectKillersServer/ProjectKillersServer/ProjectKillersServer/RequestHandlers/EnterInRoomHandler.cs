@@ -1,22 +1,16 @@
 ﻿using Common;
 using ProjectKillersCommon;
-using ProjectKillersCommon.Data;
-using ProjectKillersServer.Events;
+using ProjectKillersServer.Controllers;
 using SwiftKernelServerProject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectKillersServer.RequestHandlers {
     public class EnterInRoomHandler {
-        public static void DoHandle(NetDataRequest data, Client client, string networkID) {
-            Room room = Server.Rooms.Find(x => x.ID.Equals(data.Values["id"].ObjectValue as string));
-            room.Clients.Add(client);
+        public static void DoHandle(NetDataRequest data, ClientController client, string networkID) {
+            RoomController room = Server.RoomControllers.Find(x => x.Room.ID.Equals(data.Values["id"].ObjectValue as string));
+            room.AddClient(client);
 
             Server.SendResponse(client, Utils.ToBytesJSON(new NetDataRequest(RequestTypes.EnterInRoom, data.Values)), networkID);
-            Events.SyncRoomHandler.DoHandle(room.ID, "EventRoomHolderOnSyncRoom");
+            Events.SyncRoomHandler.DoHandle(room.Room.ID, "EventRoomHolderOnSyncRoom");
         }
     }
 }

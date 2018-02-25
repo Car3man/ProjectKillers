@@ -21,15 +21,12 @@ namespace ProjectKillersCommon.Data {
         [ProtoMember(5)]
         public string MissionName;
 
-        public BaseMission Mission;
-
         public Room(string name, string ownerID) {
             ID = Guid.NewGuid().ToString();
 
             Name = name;
             OwnerID = ownerID;
 
-            //Mission list
             List<Type> missions = BaseMission.GetMissionTypes();
             if (missions.Count > 0)
                 MissionName = missions[0].Name;

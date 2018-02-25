@@ -8,6 +8,7 @@ using SwiftKernelCommon.Core;
 using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data;
+using ProjectKillersServer.Controllers;
 
 namespace SwiftKernelServerProject {
     public class Server {
@@ -21,8 +22,40 @@ namespace SwiftKernelServerProject {
         public static ServerUpdater Updater { get; private set; }
         public static SwiftKernelServer SKServer { get; private set; }
 
-        public static List<Client> Clients = new List<Client>();
-        public static List<Room> Rooms = new List<Room>();
+        public static List<ClientController> ClientControllers = new List<ClientController>();
+        public static List<RoomController> RoomControllers = new List<RoomController>();
+
+        public static List<Room> GetRooms() {
+            List<Room> rooms = new List<Room>();
+            foreach(RoomController r in RoomControllers) {
+                rooms.Add(r.Room);
+            }
+            return rooms;
+        }
+
+        public static List<Room> GetRooms(List<RoomController> roomControllers) {
+            List<Room> rooms = new List<Room>();
+            foreach (RoomController r in roomControllers) {
+                rooms.Add(r.Room);
+            }
+            return rooms;
+        }
+
+        public static List<Client> GetClients() {
+            List<Client> clients = new List<Client>();
+            foreach (ClientController c in ClientControllers) {
+                clients.Add(c.Client);
+            }
+            return clients;
+        }
+
+        public static List<Client> GetClients(List<ClientController> clientControllers) {
+            List<Client> clients = new List<Client>();
+            foreach (ClientController c in clientControllers) {
+                clients.Add(c.Client);
+            }
+            return clients;
+        }
 
         private static void Main(string[] args) {
             Updater = new ServerUpdater();
@@ -35,7 +68,7 @@ namespace SwiftKernelServerProject {
             SKServer.OnPeerDisconnected += Server_OnPeerDisconnected;
             SKServer.OnRequestReceived += Server_OnRequestReceived;
 
-            Rooms.Add(new Room("Test Room", null));
+            RoomControllers.Add(new RoomController(new Room("Test Room", null)));
 
             SKServer.Start();
         }
@@ -43,10 +76,10 @@ namespace SwiftKernelServerProject {
         private static void Server_OnPeerConnected(NetPeer peer) {
             Console.WriteLine("Peer connected with ip {0}", peer.EndPoint.Host);
 
-            Clients.Add(new Client(peer));
+            ClientControllers.Add(new ClientController(new Client(), peer));
 
             lock (ClientsLock) {
-                Clients.Add(new Client(peer));
+                ClientControllers.Add(new ClientController(new Client(), peer));
             }
         }
 
@@ -73,17 +106,17 @@ namespace SwiftKernelServerProject {
         }
 
         private static void Server_OnRequestReceived(NetPeer peer, byte[] data, string networkID) {
-            Client client = null;
+            ClientController client = null;
 
             lock (ClientsLock) {
-                client = Clients.Find(x => x.Peer == peer);
+                client = ClientControllers.Find(x => x.Peer == peer);
             }
 
             if(client == null) return;
 
             NetDataRequest ndata = Utils.FromBytesJSON<NetDataRequest>(data);
 
-            if(string.IsNullOrEmpty(client.Nickname)) {
+            if(string.IsNullOrEmpty(client.Client.Nickname)) {
                 switch (ndata.Type) {
                     case RequestTypes.Login: LoginHandler.DoHandle(ndata, client, networkID); break;
                 }
@@ -92,7 +125,6 @@ namespace SwiftKernelServerProject {
                     case RequestTypes.EnterInMission: EnterInMissionHandler.DoHandle(ndata, client, networkID); break;
                     case RequestTypes.SyncPlayer: SyncPlayerHandler.DoHandle(ndata, client, networkID); break;
                     case RequestTypes.Shoot: ShootHandler.DoHandle(ndata, client, networkID); break;
-                    case RequestTypes.InteractObject: InteractObjectHandler.DoHandle(ndata, client, networkID); break;
                     case RequestTypes.GetRooms: GetRoomsHandler.DoHandle(ndata, client, networkID); break;
                     case RequestTypes.CreateRoom: CreateRoomHandler.DoHandle(ndata, client, networkID); break;
                     case RequestTypes.EnterInRoom: EnterInRoomHandler.DoHandle(ndata, client, networkID); break;
@@ -105,28 +137,28 @@ namespace SwiftKernelServerProject {
 
         #region Public API
          
-        public static void SendResponse(List<Client> clients, byte[] data, string networkID = "") {
-            foreach(Client c in clients) {
+        public static void SendResponse(List<ClientController> clients, byte[] data, string networkID = "") {
+            foreach(ClientController c in clients) {
                 SKServer.SendResponse(c.Peer, data, networkID);
             }
         }
 
-        public static void SendEvent(List<Client> clients, byte[] data, string networkID = "") {
-            foreach(Client c in clients) {
+        public static void SendEvent(List<ClientController> clients, byte[] data, string networkID = "") {
+            foreach(ClientController c in clients) {
                 SKServer.SendEvent(c.Peer, data, networkID);
             }
         }
 
-        public static void SendResponse(Client client, byte[] data, string networkID = "") {
+        public static void SendResponse(ClientController client, byte[] data, string networkID = "") {
             SKServer.SendResponse(client.Peer, data, networkID);
         }
 
-        public static void SendEvent(Client client, byte[] data, string networkID = "") {
+        public static void SendEvent(ClientController client, byte[] data, string networkID = "") {
             SKServer.SendEvent(client.Peer, data, networkID);
         }
 
-        public static Room GetClientRoom(Client client) {
-            foreach(Room r in Rooms) {
+        public static RoomController GetClientRoom(ClientController client) {
+            foreach(RoomController r in RoomControllers) {
                 if (r.Clients.Contains(client)) {
                     return r;
                 }

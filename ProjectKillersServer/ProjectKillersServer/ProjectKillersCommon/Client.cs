@@ -1,10 +1,5 @@
-﻿using ProjectKillersCommon.Classes;
-using ProtoBuf;
-using SwiftKernelCommon.Core;
+﻿using ProtoBuf;
 using System;
-using System.Collections.Generic;
-using ProjectKillersCommon.Data.Objects;
-using ProjectKillersCommon.Data.Missions;
 
 namespace ProjectKillersCommon {
     [Serializable]
@@ -15,43 +10,14 @@ namespace ProjectKillersCommon {
         [ProtoMember(2)]
         public string Nickname = "";
 
-        public NetPeer Peer;
-        public bool Actualy = false;
-        public bool MissionFirstInited = false;
-        public BaseMission Mission;
-
-        public Dictionary<string, BaseMissionObject> ControlledObjects = new Dictionary<string, BaseMissionObject>();
-
-        public PlayerObject CurrentPlayer {
-            get {
-                foreach (string key in ControlledObjects.Keys) {
-                    if (ControlledObjects[key] is PlayerObject) {
-                        return ControlledObjects[key] as PlayerObject;
-                    }
-                }
-                return null;
-            }
-        }
-
-        public Client(NetPeer peer, string id) {
-            Peer = peer;
+        public Client(string id) {
             ID = id;
-            Actualy = false;
-
             Nickname = "";
         }
 
-        public Client(NetPeer peer) {
-            Peer = peer;
-
+        public Client() {
             ID = Guid.NewGuid().ToString();
-
             Nickname = "";
-        }
-
-        public void SetMission(BaseMission mission) {
-            MissionFirstInited = false;
-            Mission = mission;
         }
     }
 }

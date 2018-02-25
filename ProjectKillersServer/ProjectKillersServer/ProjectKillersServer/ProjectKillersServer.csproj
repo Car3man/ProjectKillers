@@ -46,11 +46,29 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dll\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\Missions\BaseMissionController.cs" />
+    <Compile Include="Controllers\Missions\TestMissionController.cs" />
+    <Compile Include="Controllers\Objects\BaseMissionObjectController.cs" />
+    <Compile Include="Controllers\Objects\BulletObjectController.cs" />
+    <Compile Include="Controllers\Objects\PlayerObjectController.cs" />
+    <Compile Include="Controllers\Objects\SkeletonObjectController.cs" />
+    <Compile Include="Controllers\Objects\TestObjectController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Events\SendRoomsHandler.cs" />
     <Compile Include="Events\SyncRoomHandler.cs" />
+    <Compile Include="Factories\MissionControllerFactory.cs" />
+    <Compile Include="Factories\ObjectControllerFactory.cs" />
     <Compile Include="MissionDispenser.cs" />
+    <Compile Include="Physics\CollisionHandler.cs" />
+    <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Physics\PhysicsSolver.cs" />
     <Compile Include="RequestHandlers\CreateRoomHandler.cs" />
     <Compile Include="RequestHandlers\EnterInRoomHandler.cs" />
     <Compile Include="RequestHandlers\GetRoomsHandler.cs" />
@@ -62,7 +80,6 @@
     <Compile Include="Events\LeaveMissionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestHandlers\EnterInMissionHandler.cs" />
-    <Compile Include="RequestHandlers\InteractObjectHandler.cs" />
     <Compile Include="RequestHandlers\ShootHandler.cs" />
     <Compile Include="RequestHandlers\SyncPlayerHandler.cs" />
     <Compile Include="ServerUpdater.cs" />

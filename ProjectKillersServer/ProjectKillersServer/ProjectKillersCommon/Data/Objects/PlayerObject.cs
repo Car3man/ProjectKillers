@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ProjectKillersCommon.Classes;
 using ProtoBuf;
 
@@ -42,24 +41,9 @@ namespace ProjectKillersCommon.Data.Objects {
             EulerAngles = eulerAngles;
 
             CanBreaked = false;
-            Changed = true;
 
             Name = "Player";
             NameID = "Player";
-        }
-
-        public override void DoRequest (Dictionary<string, object> request) {
-            
-        }
-
-        public override void Update(float deltaTime) {
-            CheckHealth();
-        }
-
-        private void CheckHealth() {
-            if (Health <= 0) {
-                Destroy();
-            }
         }
     }
 }

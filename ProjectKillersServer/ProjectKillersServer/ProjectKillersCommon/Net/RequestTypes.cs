@@ -6,7 +6,6 @@
         LeaveMission,
         SyncPlayer,
         Shoot,
-        InteractObject,
         SyncMission,
         GetRooms,
         CreateRoom,

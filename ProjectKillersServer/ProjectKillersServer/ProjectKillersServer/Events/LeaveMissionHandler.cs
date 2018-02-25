@@ -1,5 +1,6 @@
 ﻿using Common;
 using ProjectKillersCommon;
+using ProjectKillersServer.Controllers;
 using SwiftKernelServerProject;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace ProjectKillersServer.Events
     {
         public static void DoHandle(Client client, string networkID)
         {
-            List<Client> clients = new List<Client>(Server.Clients);
-            clients.Remove(client);
+            List<ClientController> clients = new List<ClientController>(Server.ClientControllers);
+            clients.RemoveAll(x => x.Client == client);
             clients.RemoveAll(x => !x.Actualy);
 
             NetDataEvent allResponse = new NetDataEvent(EventTypes.LeaveMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(client.ID) } });

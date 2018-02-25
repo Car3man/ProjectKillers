@@ -1,7 +1,6 @@
 ﻿using ProjectKillersCommon.Classes;
 using ProtoBuf;
 using System;
-using System.Collections.Generic;
 
 namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
@@ -19,10 +18,6 @@ namespace ProjectKillersCommon.Data.Objects {
             NameID = "TestObject";
 
             IsStatic = true;
-        }
-
-        public override void DoRequest(Dictionary<string, object> request) {
-            
         }
     }
 }

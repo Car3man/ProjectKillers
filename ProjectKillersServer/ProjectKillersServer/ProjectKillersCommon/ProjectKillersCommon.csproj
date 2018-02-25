@@ -67,9 +67,6 @@
     <Compile Include="Net\NetDataEvent.cs" />
     <Compile Include="Net\NetDataRequest.cs" />
     <Compile Include="ObjectWrapper.cs" />
-    <Compile Include="Physics\CollisionHandler.cs" />
-    <Compile Include="Physics\Physics.cs" />
-    <Compile Include="Physics\PhysicsSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Net\EventTypes.cs" />
     <Compile Include="Net\RequestResult.cs" />

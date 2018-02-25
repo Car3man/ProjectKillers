@@ -1,9 +1,10 @@
 ﻿using System;
 using ProjectKillersCommon.Data.Objects;
+using ProjectKillersServer.Controllers.Objects;
 
-namespace ProjectKillersServer.Physics {
+namespace ProjectKillersServer {
     public class CollisionHandler {
-        public void OnCollide(BaseMissionObject body1, BaseMissionObject body2) {
+        public void OnCollide(BaseMissionObjectController body1, BaseMissionObjectController body2) {
             if (body1 == null || body2 == null) return;
 
             body1.OnCollide(body2);
