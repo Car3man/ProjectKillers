@@ -1,13 +1,10 @@
 ﻿<Properties StartupConfiguration="{087E331F-5A25-4C68-B351-5FC37E14F3C2}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs">
     <Files>
-      <File FileName="ProjectKillersServer/RequestHandlers/SyncPlayerHandler.cs" Line="18" Column="43" />
-      <File FileName="ProjectKillersServer/Events/SyncMissionHandler.cs" Line="30" Column="1" />
-      <File FileName="ProjectKillersCommon/Data/Missions/BaseMission.cs" Line="25" Column="1" />
-      <File FileName="ProjectKillersServer/Controllers/Objects/BulletObjectController.cs" Line="22" Column="24" />
-      <File FileName="ProjectKillersServer/Controllers/Objects/PlayerObjectController.cs" Line="1" Column="1" />
-      <File FileName="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs" Line="52" Column="181" />
-      <File FileName="ProjectKillersServer/Controllers/Objects/TestObjectController.cs" Line="1" Column="1" />
+      <File FileName="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs" Line="26" Column="34" />
+      <File FileName="ProjectKillersCommon/Data/Objects/PlayerObject.cs" Line="25" Column="31" />
+      <File FileName="ProjectKillersCommon/Data/Objects/TestObject.cs" Line="1" Column="1" />
+      <File FileName="ProjectKillersServer/Controllers/Missions/TestMissionController.cs" Line="32" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -9,8 +9,10 @@ public class Skeleton : NetworkMissionObject, IHumanObject {
 
     [SerializeField] protected Image healthBarFill;
 
-    private void Awake() {
-        string hitID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(DoHit, false);
+    public override void InitID(string id) {
+        base.InitID(id);
+
+        string hitID = NetManager.I.Client.UnityEventReceiver.AddEventObserver(DoHit, false, string.Format("EventZombieHit_{0}", id));
     }
 
     public override void Update() {

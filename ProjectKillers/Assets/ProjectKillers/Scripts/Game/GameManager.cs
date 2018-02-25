@@ -86,6 +86,10 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
             
                 if(o.Value is PlayerObject) {
                     players.Add(go.GetComponent<Player>());
+
+                    if (isOwn) {
+                        CameraController.I.Target = go;
+                    }
                 }
             }
         }
@@ -98,6 +102,10 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
                 if (o.Value is IHuman) {
                     (obj as IHumanObject).SyncHealth((o.Value as IHuman).Health, (o.Value as IHuman).MaxHealth);
+
+                    if (o.Value is PlayerObject) {
+                        GameGUIManager.I.UpdateHealthBar((o.Value as IHuman).Health, (o.Value as IHuman).MaxHealth);
+                    }
                 }
 
                 if (o.Value.Destroyed) {
@@ -134,9 +142,9 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
 
         obj.GetComponent<BoxCollider2D>().offset = center;
         obj.GetComponent<BoxCollider2D>().size = size;
-
-        obj.GetComponent<NetworkMissionObject>().ID = id;
         obj.GetComponent<NetworkMissionObject>().IsOwn = isOwn;
+
+        obj.GetComponent<NetworkMissionObject>().InitID(id);
 
         return obj;
     }

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ProjectKillersServer.Controllers.Objects {
     public class SkeletonObjectController : BaseMissionObjectController {
-        private float hitTimeDown;
+        private float hitTimeDown = 0f;
         public float HitTime = 1.5f;
 
         public SkeletonObjectController(BaseMissionObject obj) : base(obj) {
@@ -23,8 +23,11 @@ namespace ProjectKillersServer.Controllers.Objects {
 
             if (targetPlayer == null) return;
 
-            if (Vector3K.Distance(targetPlayer.Object.Position, Object.Position) > 2f) {
-                hitTimeDown = HitTime;
+            float dist = Vector3K.Distance(targetPlayer.Object.Position, Object.Position);
+
+            if (dist > 2f) {
+                if (dist > 4f)
+                    hitTimeDown = 0f;
 
                 Object.EulerAngles.z = (float)(Mathf.Rad2Deg * (Math.Atan2(targetPlayer.Object.Position.y - Object.Position.y, targetPlayer.Object.Position.x - Object.Position.x)));
 
@@ -34,9 +37,8 @@ namespace ProjectKillersServer.Controllers.Objects {
                 body.SetXForm(new Box2DX.Common.Vec2(Object.Position.x, Object.Position.y), Object.EulerAngles.z * Mathf.Deg2Rad);
             } else {
                 hitTimeDown -= deltaTime;
+                CheckHit(targetPlayer);
             }
-
-            CheckHit(targetPlayer);
         }
 
         private void CheckHealth() {
@@ -50,7 +52,7 @@ namespace ProjectKillersServer.Controllers.Objects {
                 (player.Object as PlayerObject).Health -= 10;
                 hitTimeDown = HitTime;
 
-                Server.SendEvent(MissionController.RoomController.Clients, Utils.ToBytesJSON(new NetDataEvent(EventTypes.Unknow, new System.Collections.Generic.Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(this.Object.ID) } })), "EventSkeletonDoHit");
+                Server.SendEvent(MissionController.RoomController.Clients, Utils.ToBytesJSON(new NetDataEvent(EventTypes.Unknow, new System.Collections.Generic.Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(this.Object.ID) } })), string.Format("EventZombieHit_{0}", Object.ID));
 
                 Console.WriteLine("Player health: {0}", (player.Object as PlayerObject).Health);
             }

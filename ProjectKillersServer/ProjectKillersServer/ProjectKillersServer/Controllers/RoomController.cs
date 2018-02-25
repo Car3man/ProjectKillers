@@ -6,6 +6,8 @@ namespace ProjectKillersServer.Controllers {
         public Room Room;
         public BaseMissionController MissionController;
 
+        public bool MissionStarted = false;
+
         public List<ClientController> Clients = new List<ClientController>();
 
         public RoomController(Room room) {

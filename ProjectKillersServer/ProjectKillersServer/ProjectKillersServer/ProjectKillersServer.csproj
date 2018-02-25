@@ -84,6 +84,7 @@
     <Compile Include="RequestHandlers\SyncPlayerHandler.cs" />
     <Compile Include="ServerUpdater.cs" />
     <Compile Include="Events\SyncMissionHandler.cs" />
+    <Compile Include="SpawnManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

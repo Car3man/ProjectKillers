@@ -15,6 +15,10 @@ public class NetworkMissionObject : MonoBehaviour {
     private Vector3 newPosition;
     private Vector3 newRotation;
 
+    public virtual void InitID(string id) {
+        ID = id;
+    }
+
     public virtual void Start () {
         newPosition = transform.position;
         newRotation = transform.eulerAngles;
