@@ -63,8 +63,8 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Events\SendRoomsHandler.cs" />
     <Compile Include="Events\SyncRoomHandler.cs" />
-    <Compile Include="Factories\MissionControllerFactory.cs" />
-    <Compile Include="Factories\ObjectControllerFactory.cs" />
+    <Compile Include="Factories\MissionFactory.cs" />
+    <Compile Include="Factories\ObjectFactory.cs" />
     <Compile Include="MissionDispenser.cs" />
     <Compile Include="Physics\CollisionHandler.cs" />
     <Compile Include="Physics\Physics.cs" />

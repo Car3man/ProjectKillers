@@ -1,6 +1,5 @@
 ﻿using Box2DX.Dynamics;
 using ProjectKillersCommon.Data.Missions;
-using ProjectKillersCommon.Data.Objects;
 using ProjectKillersServer.Controllers.Objects;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,8 @@ using System.Linq;
 namespace ProjectKillersServer.Controllers {
     public class BaseMissionController {
         public BaseMission Mission;
+
+        public RoomController RoomController;
 
         public Dictionary<string, BaseMissionObjectController> Objects = new Dictionary<string, BaseMissionObjectController>();
         public Dictionary<string, BaseMissionObjectController> DynamicObjects = new Dictionary<string, BaseMissionObjectController>();
@@ -51,9 +52,9 @@ namespace ProjectKillersServer.Controllers {
             Physics.Update(deltaTime);
         }
 
-        public virtual void AddObject(BaseMissionObjectController obj, World world) {
+        public virtual void AddObject(BaseMissionObjectController obj) {
             lock (locker) {
-                obj.SetupPhysics(world);
+                obj.SetupPhysics(Physics.World);
                 obj.MissionController = this;
 
                 Objects.Add(obj.Object.ID, obj);
@@ -61,9 +62,9 @@ namespace ProjectKillersServer.Controllers {
             }
         }
 
-        public virtual void AddDynamicObject(BaseMissionObjectController obj, World world) {
+        public virtual void AddDynamicObject(BaseMissionObjectController obj) {
             lock (locker) {
-                obj.SetupPhysics(world);
+                obj.SetupPhysics(Physics.World);
                 obj.MissionController = this;
 
                 DynamicObjects.Add(obj.Object.ID, obj);

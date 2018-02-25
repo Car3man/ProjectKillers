@@ -1,14 +1,12 @@
 ﻿using Common;
 using ProjectKillersCommon;
 using ProjectKillersCommon.Classes;
-using ProjectKillersCommon.Data.Missions;
 using SwiftKernelServerProject;
-using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data.Objects;
-using ProjectKillersCommon.Data;
 using ProjectKillersServer.Controllers;
 using ProjectKillersServer.Controllers.Objects;
+using ProjectKillersServer.Factories;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class EnterInMissionHandler {
@@ -32,11 +30,8 @@ namespace ProjectKillersServer.RequestHandlers {
             PlayerObject player = new PlayerObject(new Vector3K(0f, 0f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(2f, 2f, 2f), new Vector3K(0f, 0f, 0f));
             player.OwnerID = client.Client.ID;
 
-            PlayerObjectController playerController = new PlayerObjectController(player);
-            playerController.MissionController = client.MissionController;
- 
-
-            client.MissionController.AddDynamicObject(playerController, client.MissionController.Physics.World);
+            PlayerObjectController playerController = ObjectFactory.GetObject(player) as PlayerObjectController;
+            client.MissionController.AddDynamicObject(playerController);
             client.ControlledObjects.Add(player.ID, playerController);
 
             NetDataRequest response = new NetDataRequest(RequestTypes.EnterInMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });

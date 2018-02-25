@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectKillersServer.Factories;
 
 namespace ProjectKillersServer.RequestHandlers {
     public static class ShootHandler {
@@ -30,10 +31,7 @@ namespace ProjectKillersServer.RequestHandlers {
             pos.y += playerPos.y;
 
             BulletObject bullet = new BulletObject(pos, new Vector3K(0f, 0f, 0f), new Vector3K(0.28f, 0.09f, 0f), rot);
-            BulletObjectController bulletController = new BulletObjectController(bullet);
-            bulletController.MissionController = client.MissionController;
-
-            client.MissionController.AddDynamicObject(bulletController, client.MissionController.Physics.World);
+            client.MissionController.AddDynamicObject(ObjectFactory.GetObject(bullet));
 
             NetDataRequest allResponse = new NetDataRequest(RequestTypes.Shoot, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(id) } });
             Server.SendResponse(clients, Utils.ToBytesJSON(allResponse), networkID);

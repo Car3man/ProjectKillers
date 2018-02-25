@@ -25,7 +25,7 @@ namespace ProjectKillersServer {
                         throw new Exception(string.Format("unknow mission name: {0}", missionName));
                 }
 
-                room.MissionController = MissionControllerFactory.GetMission(mission);
+                room.MissionController = MissionFactory.GetMissionController(mission, room);
                 room.MissionController.Mission = mission;
 
                 Server.Updater.OnUpdate += room.MissionController.Update;
