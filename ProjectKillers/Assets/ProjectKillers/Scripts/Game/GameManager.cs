@@ -103,7 +103,7 @@ public class GameManager : LocalSingletonBehaviour<GameManager> {
                 if (o.Value is IHuman) {
                     (obj as IHumanObject).SyncHealth((o.Value as IHuman).Health, (o.Value as IHuman).MaxHealth);
 
-                    if (o.Value is PlayerObject) {
+                    if (o.Value is PlayerObject && o.Value.OwnerID.Equals(NetManager.I.ID)) {
                         GameGUIManager.I.UpdateHealthBar((o.Value as IHuman).Health, (o.Value as IHuman).MaxHealth);
                     }
                 }

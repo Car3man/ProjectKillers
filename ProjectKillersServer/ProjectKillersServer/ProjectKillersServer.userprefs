@@ -1,7 +1,7 @@
 ﻿<Properties StartupConfiguration="{087E331F-5A25-4C68-B351-5FC37E14F3C2}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs">
     <Files>
-      <File FileName="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs" Line="26" Column="34" />
+      <File FileName="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs" Line="34" Column="43" />
       <File FileName="ProjectKillersCommon/Data/Objects/PlayerObject.cs" Line="25" Column="31" />
       <File FileName="ProjectKillersCommon/Data/Objects/TestObject.cs" Line="1" Column="1" />
       <File FileName="ProjectKillersServer/Controllers/Missions/TestMissionController.cs" Line="32" Column="13" />

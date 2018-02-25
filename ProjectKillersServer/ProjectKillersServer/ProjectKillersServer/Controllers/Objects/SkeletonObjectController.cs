@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Common;
 using ProjectKillersCommon;
@@ -19,7 +20,17 @@ namespace ProjectKillersServer.Controllers.Objects {
         public override void Update(float deltaTime) {
             CheckHealth();
 
-            PlayerObjectController targetPlayer = MissionController.DynamicObjects.Values.FirstOrDefault(x => x.GetType() == typeof(PlayerObjectController)) as PlayerObjectController;
+            List<BaseMissionObjectController> players = MissionController.DynamicObjects.Values.Where(x => x.GetType() == typeof(PlayerObjectController)).ToList();
+
+            PlayerObjectController targetPlayer = null;
+
+            float distance = float.MaxValue;
+            foreach (BaseMissionObjectController pl in players) {
+                if (distance > Vector3K.Distance(pl.Object.Position, Object.Position)) {
+                    targetPlayer = pl as PlayerObjectController;
+                    distance = Vector3K.Distance(pl.Object.Position, Object.Position);
+                }
+            }
 
             if (targetPlayer == null) return;
 
