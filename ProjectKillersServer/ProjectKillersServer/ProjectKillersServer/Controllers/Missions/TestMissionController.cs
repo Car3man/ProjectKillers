@@ -5,7 +5,7 @@ using ProjectKillersServer.Factories;
 
 namespace ProjectKillersServer.Controllers {
     public class TestMissionController : BaseMissionController {
-        private SpawnManager spawnManager;
+        private WaveManager waveManager;
 
         public TestMissionController(BaseMission mission) : base(mission) {
             TestObject testObj1 = new TestObject(new Vector3K(2f, 5f, 0f), new Vector3K(0f, 0f, 0f), new Vector3K(0.75f, 0.75f, 0.75f), new Vector3K(0f, 0f, 0f));
@@ -30,14 +30,14 @@ namespace ProjectKillersServer.Controllers {
             AddObject(ObjectFactory.GetObject(testObj9));
             AddObject(ObjectFactory.GetObject(testObj10));
 
-            spawnManager = new SpawnManager();
-            spawnManager.MissionController = this;
+            waveManager = new WaveManager();
+            waveManager.MissionController = this;
         }
 
         public override void Update(float deltaTime) {
             base.Update(deltaTime);
 
-            spawnManager.Update(deltaTime);
+            waveManager.Update(deltaTime);
         }
     }
 }

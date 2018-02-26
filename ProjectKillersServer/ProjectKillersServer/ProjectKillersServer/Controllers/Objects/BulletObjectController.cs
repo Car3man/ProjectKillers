@@ -25,12 +25,9 @@ namespace ProjectKillersServer.Controllers.Objects {
         }
 
         public override void OnCollide(BaseMissionObjectController other) {
-            Console.WriteLine("Bullet collided with " + other.Object.Name);
-
             if (other.Object.CanBreaked) other.Destroy();
-            if (other.Object is IHuman) {
+            if (other.Object is IHuman && !(other.Object is PlayerObject)) {
                 (other.Object as IHuman).Health -= 35;
-                Console.WriteLine("Health - {0}", (other.Object as IHuman).Health);
             }
 
             Destroy();

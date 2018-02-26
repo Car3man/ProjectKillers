@@ -10,7 +10,7 @@ namespace ProjectKillersServer.RequestHandlers {
             Room room = data.Values["room"].ObjectValue as Room;
             Server.RoomControllers.Add(new RoomController(new Room(room.Name, client.Client.ID)));
 
-            SendRoomsHandler.DoHandle("EventLobbyHolderOnGetRooms");
+            SendRoomsHandler.DoHandle();
         }
     }
 }

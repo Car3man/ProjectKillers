@@ -21,7 +21,7 @@ namespace ProjectKillersServer.Events {
                     if (Server.ClientControllers[i] != null && Server.ClientControllers[i].Actualy) {
                         NetDataEvent allResponse = new NetDataEvent(EventTypes.SyncMission, new Dictionary<string, ObjectWrapper>() { { "mission", new ObjectWrapper<BaseMission>(mission) } });
 
-                        lock(mission) {
+                        lock(Server.ClientControllers[i].MissionController.Locker) {
                             Server.SendEvent(Server.ClientControllers[i], Utils.ToBytesJSON(allResponse), "EventGameManagerHandleSyncMission");
                         }
 

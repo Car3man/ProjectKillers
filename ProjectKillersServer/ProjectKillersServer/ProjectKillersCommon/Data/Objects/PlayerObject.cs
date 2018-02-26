@@ -1,6 +1,7 @@
 ﻿using System;
 using ProjectKillersCommon.Classes;
 using ProtoBuf;
+using UnityEngine;
 
 namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
@@ -17,7 +18,7 @@ namespace ProjectKillersCommon.Data.Objects {
                 return health;
             }
             set {
-                health = value;
+                health = Mathf.Clamp(value, 0, int.MaxValue);
             }
         }
 
@@ -28,6 +29,12 @@ namespace ProjectKillersCommon.Data.Objects {
             }
             set {
                 maxHealth = value;
+            }
+        }
+
+        public bool IsLive {
+            get {
+                return health > 0;
             }
         }
 

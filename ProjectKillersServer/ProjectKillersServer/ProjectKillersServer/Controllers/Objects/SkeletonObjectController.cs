@@ -20,7 +20,7 @@ namespace ProjectKillersServer.Controllers.Objects {
         public override void Update(float deltaTime) {
             CheckHealth();
 
-            List<BaseMissionObjectController> players = MissionController.DynamicObjects.Values.Where(x => x.GetType() == typeof(PlayerObjectController)).ToList();
+            List<BaseMissionObjectController> players = MissionController.DynamicObjects.Values.Where(x => x.GetType() == typeof(PlayerObjectController) && (x.Object as PlayerObject).IsLive).ToList();
 
             PlayerObjectController targetPlayer = null;
 
@@ -64,8 +64,6 @@ namespace ProjectKillersServer.Controllers.Objects {
                 hitTimeDown = HitTime;
 
                 Server.SendEvent(MissionController.RoomController.Clients, Utils.ToBytesJSON(new NetDataEvent(EventTypes.Unknow, new System.Collections.Generic.Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(this.Object.ID) } })), string.Format("EventZombieHit_{0}", Object.ID));
-
-                Console.WriteLine("Player health: {0}", (player.Object as PlayerObject).Health);
             }
         }
     }

@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using ProjectKillersCommon.Data;
 using ProjectKillersServer.Controllers;
+using System.IO;
+using System.Net;
 
 namespace SwiftKernelServerProject {
     public class Server {
@@ -61,8 +63,19 @@ namespace SwiftKernelServerProject {
             Updater = new ServerUpdater();
             Updater.OnUpdate += SyncMissionHandler.Update;
 
+            string ip = "127.0.0.1";
+            string configPath = Path.Combine(Directory.GetCurrentDirectory(), "config.ini");
+
+            if (File.Exists(configPath)) {
+                FileStream fs = new FileStream(configPath, FileMode.Open);
+                StreamReader sr = new StreamReader(fs);
+                ip = sr.ReadLine();
+                sr.Close();
+                fs.Close();
+            }
+
             SKServer = new SwiftKernelServer();
-            SKServer.Setup(6000, "pkillers");
+            SKServer.Setup(IPAddress.Parse(ip), 6000, "pkillers");
 
             SKServer.OnPeerConnected += Server_OnPeerConnected;
             SKServer.OnPeerDisconnected += Server_OnPeerDisconnected;

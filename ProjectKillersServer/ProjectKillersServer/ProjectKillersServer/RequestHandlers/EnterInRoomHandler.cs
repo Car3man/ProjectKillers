@@ -10,7 +10,7 @@ namespace ProjectKillersServer.RequestHandlers {
             room.AddClient(client);
 
             Server.SendResponse(client, Utils.ToBytesJSON(new NetDataRequest(RequestTypes.EnterInRoom, data.Values)), networkID);
-            Events.SyncRoomHandler.DoHandle(room.Room.ID, "EventRoomHolderOnSyncRoom");
+            Events.SyncRoomHandler.DoHandle(room.Room.ID);
         }
     }
 }

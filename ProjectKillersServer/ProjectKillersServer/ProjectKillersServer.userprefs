@@ -1,10 +1,23 @@
 ﻿<Properties StartupConfiguration="{087E331F-5A25-4C68-B351-5FC37E14F3C2}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ProjectKillersServer/WaveManager.cs">
     <Files>
-      <File FileName="ProjectKillersServer/Controllers/Objects/SkeletonObjectController.cs" Line="34" Column="43" />
-      <File FileName="ProjectKillersCommon/Data/Objects/PlayerObject.cs" Line="25" Column="31" />
       <File FileName="ProjectKillersCommon/Data/Objects/TestObject.cs" Line="1" Column="1" />
-      <File FileName="ProjectKillersServer/Controllers/Missions/TestMissionController.cs" Line="32" Column="13" />
+      <File FileName="ProjectKillersServer/Controllers/Missions/TestMissionController.cs" Line="30" Column="49" />
+      <File FileName="ProjectKillersServer/Server.cs" Line="114" Column="87" />
+      <File FileName="ProjectKillersServer/Events/SyncMissionHandler.cs" Line="24" Column="82" />
+      <File FileName="ProjectKillersServer/Controllers/Missions/BaseMissionController.cs" Line="26" Column="10" />
+      <File FileName="ProjectKillersCommon/Data/Objects/Interfaces/IHuman.cs" Line="5" Column="27" />
+      <File FileName="ProjectKillersServer/Events/NewWaveHandler.cs" Line="1" Column="1" />
+      <File FileName="ProjectKillersServer/Events/SendRoomsHandler.cs" Line="15" Column="116" />
+      <File FileName="ProjectKillersServer/Events/SyncRoomHandler.cs" Line="18" Column="103" />
+      <File FileName="ProjectKillersCommon/Net/RequestTypes.cs" Line="16" Column="14" />
+      <File FileName="ProjectKillersCommon/Net/EventTypes.cs" Line="10" Column="16" />
+      <File FileName="ProjectKillersServer/Events/LeaveMissionHandler.cs" Line="22" Column="107" />
+      <File FileName="ProjectKillersServer/RequestHandlers/CreateRoomHandler.cs" Line="13" Column="39" />
+      <File FileName="ProjectKillersServer/RequestHandlers/EnterInRoomHandler.cs" Line="13" Column="57" />
+      <File FileName="ProjectKillersServer/RequestHandlers/LeaveRoomHandler.cs" Line="13" Column="57" />
+      <File FileName="ProjectKillersServer/SpawnManager.cs" Line="31" Column="10" />
+      <File FileName="ProjectKillersServer/WaveManager.cs" Line="51" Column="56" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

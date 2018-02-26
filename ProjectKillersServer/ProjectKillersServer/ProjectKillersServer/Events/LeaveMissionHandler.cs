@@ -12,14 +12,14 @@ namespace ProjectKillersServer.Events
 {
     public static class LeaveMissionHandler
     {
-        public static void DoHandle(Client client, string networkID)
+        public static void DoHandle(ClientController client)
         {
             List<ClientController> clients = new List<ClientController>(Server.ClientControllers);
-            clients.RemoveAll(x => x.Client == client);
+            clients.RemoveAll(x => x.Client == client.Client);
             clients.RemoveAll(x => !x.Actualy);
 
-            NetDataEvent allResponse = new NetDataEvent(EventTypes.LeaveMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(client.ID) } });
-            Server.SendEvent(clients, Utils.ToBytesJSON(allResponse), networkID);
+            NetDataEvent allResponse = new NetDataEvent(EventTypes.LeaveMission, new Dictionary<string, ObjectWrapper>() { { "id", new ObjectWrapper<string>(client.Client.ID) } });
+            Server.SendEvent(clients, Utils.ToBytesJSON(allResponse), "EventGameManagerHandleLeaveMission");
         }
     }
 }

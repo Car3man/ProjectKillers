@@ -85,6 +85,8 @@
     <Compile Include="ServerUpdater.cs" />
     <Compile Include="Events\SyncMissionHandler.cs" />
     <Compile Include="SpawnManager.cs" />
+    <Compile Include="Events\NewWaveHandler.cs" />
+    <Compile Include="WaveManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

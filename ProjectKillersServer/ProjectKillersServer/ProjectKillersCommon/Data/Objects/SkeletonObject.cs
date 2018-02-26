@@ -1,6 +1,7 @@
 ﻿using ProjectKillersCommon.Classes;
 using ProtoBuf;
 using System;
+using UnityEngine;
 
 namespace ProjectKillersCommon.Data.Objects {
     [Serializable]
@@ -10,7 +11,6 @@ namespace ProjectKillersCommon.Data.Objects {
         private int maxHealth = 100;
 
         public float MoveSpeed = 5f;
-        public float HitTime = 1f;
 
         [ProtoMember(1)]
         public int Health {
@@ -18,7 +18,7 @@ namespace ProjectKillersCommon.Data.Objects {
                 return health;
             }
             set {
-                health = value;
+                health = Mathf.Clamp(value, 0, int.MaxValue);
             }
         }
 
@@ -32,7 +32,11 @@ namespace ProjectKillersCommon.Data.Objects {
             }
         }
 
-        private float hitTimeDown;
+        public bool IsLive {
+            get {
+                return health > 0;
+            }
+        }
 
         public SkeletonObject(Vector3K position, Vector3K center, Vector3K size, Vector3K eulerAngles) : base(position, center, size, eulerAngles) {
             ID = Guid.NewGuid().ToString();
@@ -46,8 +50,6 @@ namespace ProjectKillersCommon.Data.Objects {
 
             Name = "Skeleton";
             NameID = "Skeleton";
-
-            hitTimeDown = HitTime;
         }
     }
 }

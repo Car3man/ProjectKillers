@@ -6,6 +6,7 @@
         SyncMission,
         SendRooms,
         StartMission,
-        SyncRoom
+        SyncRoom,
+        NewWave
     }
 }
